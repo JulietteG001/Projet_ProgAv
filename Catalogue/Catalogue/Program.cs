@@ -10,6 +10,9 @@ namespace Catalogue
     {
         static void Main(string[] args)
         {
+            Consultation consultation = new Consultation();
+            consultation.AffinerLaRecherche();
+            Console.ReadLine();
         }
     }
 }
