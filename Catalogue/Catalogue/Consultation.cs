@@ -23,5 +23,16 @@ namespace Catalogue
                 Console.WriteLine("Par matière");
             }
         }
+
+        public interface ITrouvable
+        {
+            //l'interface se charge de regarder si, pour un des critères de recherche, 
+            //il y a dans les projets créés un critère qui correspond. 
+            //si c'est le cas, pour chaque projet, il faut que ce projet soit ciblé et
+            //retenu pour être envoyé à la méthode AfficherResultat
+
+            //déclaration de la classe de base
+            Projet Critere(string attrrech, string critrech);
+        }
     }
 }
