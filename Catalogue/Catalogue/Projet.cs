@@ -25,8 +25,10 @@ namespace Catalogue
             Semestres = "";
             Consigne = "";
             Livrables = new List<Livrable>();
+            MatièreProjet = null;
             Intervenants = new List<Intervenant>();
         }
+        
         public Projet(string nomprojet, int nbEleves, int duree, string semestres, string consigne, List<Livrable> livrables, List<Intervenant> intervenants) 
         //Constructeur surchargé
         {
@@ -37,6 +39,11 @@ namespace Catalogue
             Consigne = consigne;
             Livrables = livrables;
             Intervenants = intervenants;
+        }
+        public override string ToString()
+        {
+            string chRes = "Nom : " + NomProjet + " Nombre d'élèves: " + NbEleves + " Durée : " + Duree + " Semestres : " + Semestres + " Consigne : " + Consigne + " Livrables : " + Livrables + " Matière associée : " + MatièreProjet + " Intervenants : " + Intervenants;
+            return chRes;
         }
 
         //implémentation de l'interface

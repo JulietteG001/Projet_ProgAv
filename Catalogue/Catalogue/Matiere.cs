@@ -8,7 +8,7 @@ namespace Catalogue
 {
     class Matiere
     {
-        private string Nom { get; set; }
+        public string Nom { get; set; }
         private string Coefficient { get; set; }
         private List<Intervenant> Encadrants { get; set; } 
 
@@ -23,6 +23,11 @@ namespace Catalogue
             Nom = nom;
             Coefficient = coefficient;
             List<Intervenant> Encadrants = encadrants;
+        }
+        public override string ToString()
+        {
+            string chRes = "Nom : " + Nom + " Coefficient : " + Coefficient + " Encadrants : " + Encadrants;
+            return chRes;
         }
     }
 }

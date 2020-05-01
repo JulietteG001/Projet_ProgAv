@@ -17,5 +17,10 @@ namespace Catalogue
         {
             Nature = nature;
         }
+        public override string ToString()
+        {
+            string chRes = "Nature : " + Nature;
+            return chRes;
+        }
     }
 }
