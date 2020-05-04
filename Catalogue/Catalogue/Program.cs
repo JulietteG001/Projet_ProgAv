@@ -11,7 +11,10 @@ namespace Catalogue
         static void Main(string[] args)
         {
             Consultation consultation = new Consultation();
-            consultation.AffinerLaRecherche();
+            //consultation.AffinerLaRecherche();
+
+            Projet p = new Projet();
+            Console.WriteLine(p.CritMatiere("Introduction à la programmation").ToString());
             Console.ReadLine();
         }
     }
