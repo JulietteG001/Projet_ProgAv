@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace Catalogue
 {
@@ -49,7 +50,7 @@ namespace Catalogue
         }
 
         //public override Projet CritLivrable(object critlivr)
-        ////implémentation de l'interface pour trouver untype de livrable
+        ////implémentation de l'interface pour trouver un type de livrable
         //{
         //    string livr = critlivr as string;
         //    for (int i = 0; i < this.Livrables.Count; i++)
@@ -68,17 +69,21 @@ namespace Catalogue
         public Projet CritMatiere(object critmat)
         //implémentation de l'interface pour trouver une matière
         {
-            XmlTextReader monXmlTextReader = new XmlTextReader("Catalogue_projets.xml");
-            monXmlTextReader.ReadToFollowing("matiere");
+            XmlTextReader reader = new XmlTextReader("Catalogue_projets.xml");
+            
+            reader.ReadToFollowing("MatiereProjet");
 
             string matiere = critmat as string;
+
+            string mot = reader.ReadElementContentAsString();
+            int i = 0;
             //Je cherche si un projet correspond à la matière cherchée
-            if (monXmlTextReader.ReadElementContentAsString() != matiere) { 
-            while (monXmlTextReader.ReadElementContentAsString() != matiere) //Peut être un problème avec cette boucle
-                {
-                monXmlTextReader.ReadToFollowing("matiere"); //On passe à la balise "matiere" suivante, càd on inspecte le projet suivant
-            } }
-            
+            while (mot != matiere) 
+            {
+                reader.ReadToFollowing("MatiereProjet"); //On passe à la balise "matiere" suivante, càd on inspecte le projet suivant
+                mot = reader.ReadElementContentAsString();
+                i++; // ce i va nous aider à retrouver le projet plus tard
+            }
             //Je ne vois pas comment gérer l'erreur si il n'y a pas de projet pour la matière sélectionnée
 
             //Si un projet contient la matière recherchée, alors il faut créé un objet Matiere 
@@ -86,26 +91,32 @@ namespace Catalogue
 
 
             //Création d'un second reader qui ne contient que le projet étudié
+            for (int j = 0; j < i; j++)
+            {
+                reader.ReadToFollowing("Projet"); //on se déplace jusqu'au ième projet, càd celui qu'on cherche
+            }
 
-            //XmlReader inner = monXmlTextReader.ReadSubtree();
+            //reader.MoveToContent();
+            XmlReader inner = reader.ReadSubtree();
 
-            //inner.ReadToDescendant("nom");
-            //string nom = inner.Name;
-            //inner.ReadToDescendant("nb_eleves");
-            //int nb = monXmlTextReader.ReadElementContentAsInt();
-            
+            inner.ReadToDescendant("nom");
+            string nom = inner.Name;
+
             //Essai d'une autre méthode : ReadInnerXml pour lire tout le contenu du noeud actuel et ainsi pouvoir créer le projet à renvoyer
-            monXmlTextReader.MoveToContent(); //on revient au noeud
-            string test = monXmlTextReader.ReadInnerXml();
-            Console.WriteLine("Voilà le résultat : " + test);
+            //reader.MoveToContent(); //on revient au noeud
+            //reader.ReadToFollowing("Projet");
+            //string test = reader.ReadInnerXml();
+            //Console.WriteLine("Résultat : " + test);
 
-            Projet p = new Projet("nom", 0, 0, "", "blabla", new List<Livrable>(), new Matiere(), new List<Intervenant>());
+            //Autre essai : sérialisation
+            //Projet proj = (Projet)new XmlSerializer(typeof(Projet)).Deserialize(reader);
+            Projet p = new Projet(nom, 0, 0, "", "blabla", new List<Livrable>(), new Matiere(), new List<Intervenant>());
             
             return p;
         }
 
         //public override Projet CritInterv(object critinterv)
-        ////implémentation de l'interface pour trouver une matière
+        ////implémentation de l'interface pour trouver un intervenant
         //{
         //    string mat = critinterv as string;
         //    for (int i = 0; i < this.Intervenants.Count; i++)
