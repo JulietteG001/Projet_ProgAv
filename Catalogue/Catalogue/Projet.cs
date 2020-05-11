@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using System.IO;
 
 namespace Catalogue
 {
-    class Projet //: Consultation.ITrouvable
+    class Projet //: Consultation.ITrouvable 
     {
         private string NomProjet { get; set; }
         private int NbEleves { get; set; }
@@ -86,21 +87,22 @@ namespace Catalogue
             }
             //Je ne vois pas comment gérer l'erreur si il n'y a pas de projet pour la matière sélectionnée
 
-            //Si un projet contient la matière recherchée, alors il faut créé un objet Matiere 
-            //(pour le placer dans les attributs du projet qu'on va renvoyer)
+            //Si un projet contient la matière recherchée, alors il faut créer un objet Matiere 
+            //(pour le placer dans les attributs du projet qu'on va renvoyer) -> problème à voir plus tard et qui ne va pas se poser si on réussit la désérialisation (cf la suite)
 
+            //Ci dessous plusieurs méthodes pour récupérer le projet à renvoyer
 
             //Création d'un second reader qui ne contient que le projet étudié
-            for (int j = 0; j < i; j++)
-            {
-                reader.ReadToFollowing("Projet"); //on se déplace jusqu'au ième projet, càd celui qu'on cherche
-            }
+            //for (int j = 0; j < i; j++)
+            //{
+            //    reader.ReadToFollowing("Projet"); //on se déplace jusqu'au ième projet, càd celui qu'on cherche
+            //}
 
-            //reader.MoveToContent();
-            XmlReader inner = reader.ReadSubtree();
+            ////reader.MoveToContent();
+            //XmlReader inner = reader.ReadSubtree();
 
-            inner.ReadToDescendant("nom");
-            string nom = inner.Name;
+            //inner.ReadToDescendant("nom");
+            //string nom = inner.Name;
 
             //Essai d'une autre méthode : ReadInnerXml pour lire tout le contenu du noeud actuel et ainsi pouvoir créer le projet à renvoyer
             //reader.MoveToContent(); //on revient au noeud
@@ -108,10 +110,17 @@ namespace Catalogue
             //string test = reader.ReadInnerXml();
             //Console.WriteLine("Résultat : " + test);
 
-            //Autre essai : sérialisation
-            //Projet proj = (Projet)new XmlSerializer(typeof(Projet)).Deserialize(reader);
-            Projet p = new Projet(nom, 0, 0, "", "blabla", new List<Livrable>(), new Matiere(), new List<Intervenant>());
-            
+            //Autre essai : désérialisation
+            List<Projet> Catalogue_projets = new List<Projet>();
+            XmlSerializer serializer = new XmlSerializer(typeof(List<Projet>)); //ne marche pas car la classe projet doit être public, mais non ça nous arrange pas
+            StreamReader sr = new StreamReader("Catalogue_projets.xml");
+
+            Catalogue_projets = (List<Projet>)serializer.Deserialize(sr);
+            sr.Close();
+
+            Projet p = Catalogue_projets[i];
+            Console.WriteLine(p);
+
             return p;
         }
 
