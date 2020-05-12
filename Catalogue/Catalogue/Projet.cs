@@ -9,16 +9,16 @@ using System.IO;
 
 namespace Catalogue
 {
-    class Projet : Consultation.ITrouvable //erreur ici normale tant qu'on a pas déclaré toutes les méthodes crées dans l'interface
+    public class Projet : Consultation.ITrouvable //erreur ici normale tant qu'on a pas déclaré toutes les méthodes crées dans l'interface
     {
-        private string NomProjet { get; set; } //Nom du projet
-        private int NbEleves { get; set; } //Nombre d'élèves impliqués dans le projet
-        private int Duree { get; set; } //Durée du projet en jours
-        private string AnneeProjet { get; set; } //Année où s'est déroulé le projet (de la forme 20XX-20XX)
-        private string Semestres { get; set; } //Numéro des semestres où s'est déroulé le projet
-        private string Consigne { get; set; } //Consigne brève de ce que demande le projet
-        private List<Livrable> Livrables { get; set; } //Liste des livrables à fournir à terme du projet
-        private Matiere MatiereProjet { get; set; } //Matière concernée par le projet
+        public string NomProjet { get; set; } //Nom du projet
+        public int NbEleves { get; set; } //Nombre d'élèves impliqués dans le projet
+        public int Duree { get; set; } //Durée du projet en jours
+        public string AnneeProjet { get; set; } //Année où s'est déroulé le projet (de la forme 20XX-20XX)
+        public string Semestres { get; set; } //Numéro des semestres où s'est déroulé le projet
+        public string Consigne { get; set; } //Consigne brève de ce que demande le projet
+        public List<Livrable> Livrables { get; set; } //Liste des livrables à fournir à terme du projet
+        public Matiere MatiereProjet { get; set; } //Matière concernée par le projet
         private List<Intervenant> Intervenants { get; set; }  //Liste des intervenants au sein du projet (profs, externes, élèves)
 
         public Projet() //Constructeur par défaut
@@ -70,6 +70,7 @@ namespace Catalogue
         //        }
         //    }
         //}
+
         public Projet CritMatiere(object critmat)
         //implémentation de l'interface pour trouver une matière
         {
@@ -78,31 +79,38 @@ namespace Catalogue
             string matiere = critmat as string;
             string mot = reader.ReadElementContentAsString(); //on dit que la valeur dans la balise MatiereProjet est un string
 
-
-
-
-
-
-
-
-
-
-
-            XmlTextReader reader = new XmlTextReader("Catalogue_projets.xml"); //déclaration du xmlReader
-            
-            reader.ReadToFollowing("MatiereProjet");
-
-            string matiere = critmat as string;
-
-            string mot = reader.ReadElementContentAsString();
-            int i = 0;
+            int i = 0; //compteur 
             //Je cherche si un projet correspond à la matière cherchée
-            while (mot != matiere) 
+            while (mot != matiere)
             {
                 reader.ReadToFollowing("MatiereProjet"); //On passe à la balise "matiere" suivante, càd on inspecte le projet suivant
                 mot = reader.ReadElementContentAsString();
+
+                //pour chaque projet, on regarde si dans la liste des matières, matiere == mot
+                if (mot == matiere)
+                {
+                    //si oui, on récupère le projet et on range tous ses attributs dans un objet de la classe Projet
+                    //on fait une liste pour y ranger les projets
+                    List<Projet> Catalogue_projets = new List<Projet>();
+                    XmlSerializer serializer = new XmlSerializer(typeof(List<Projet>));
+                    StreamReader sr = new StreamReader("Catalogue_projets.xml");
+
+                    Catalogue_projets = (List<Projet>)serializer.Deserialize(sr);
+                    sr.Close();
+
+                    Projet p = Catalogue_projets[i];
+                    Console.WriteLine(p);
+
+                    return p;
+
+                }
                 i++; // ceci va nous aider à retrouver le projet plus tard
+
+                //retourner quelque chose si jamais il trouve pas
+                //ou alors ne proposerque des matières pour lesquelles on trouve un projet en fait, c'est plus intelligent mdr
             }
+
+
             //Je ne vois pas comment gérer l'erreur si il n'y a pas de projet pour la matière sélectionnée
 
             //Si un projet contient la matière recherchée, alors il faut créer un objet Matiere 
@@ -130,19 +138,20 @@ namespace Catalogue
 
 
 
-            //Autre essai : désérialisation
-            List<Projet> Catalogue_projets = new List<Projet>();
-            XmlSerializer serializer = new XmlSerializer(typeof(List<Projet>)); //ne marche pas car la classe projet doit être public, mais non ça nous arrange pas
-            StreamReader sr = new StreamReader("Catalogue_projets.xml");
+            ////Autre essai : désérialisation
+            //List<Projet> Catalogue_projets = new List<Projet>();
+            //XmlSerializer serializer = new XmlSerializer(typeof(List<Projet>)); //ne marche pas car la classe projet doit être public, mais non ça nous arrange pas
+            //StreamReader sr = new StreamReader("Catalogue_projets.xml");
 
-            Catalogue_projets = (List<Projet>)serializer.Deserialize(sr);
-            sr.Close();
+            //Catalogue_projets = (List<Projet>)serializer.Deserialize(sr);
+            //sr.Close();
 
-            Projet p = Catalogue_projets[i];
-            Console.WriteLine(p);
+            //Projet p = Catalogue_projets[i];
+            //Console.WriteLine(p);
 
-            return p;
+            //return p;
         }
+
 
         //public override Projet CritInterv(object critinterv)
         ////implémentation de l'interface pour trouver un intervenant
@@ -162,16 +171,17 @@ namespace Catalogue
         //    }
         //}
 
-        public override Projet CritAnnee(object critannee)
-        //implémentation de l'interface pour trouver une année
-        {
-            string annee = critannee as string;
-            if (AnneeProjet == critannee as string) //on double le cast avec as, parce que sinon on fait ue comparaison de références et pas de types
-            {
-                return this;
-            }
-            //trouver comment retourner un message d'erreur
-        }
+
+        //public override Projet CritAnnee(object critannee)
+        ////implémentation de l'interface pour trouver une année
+        //{
+        //    string annee = critannee as string;
+        //    if (AnneeProjet == critannee as string) //on double le cast avec as, parce que sinon on fait ue comparaison de références et pas de types
+        //    {
+        //        return this;
+        //    }
+        //    //trouver comment retourner un message d'erreur
+        //}
 
 
         //public override bool Critere(object attrrech, object critrech)

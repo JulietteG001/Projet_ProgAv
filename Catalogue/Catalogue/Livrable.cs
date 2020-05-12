@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Catalogue
 {
-    class Livrable
+    public class Livrable
     {
-        private string Nature { get; set; }
+        public string Nature { get; set; }
         public Livrable() //Constructeur par défaut
         {
             Nature = "";

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Catalogue
 {
-    class Matiere
+    public class Matiere
     {
         public string Nom { get; set; }
-        private string Coefficient { get; set; }
+        public string Coefficient { get; set; }
         private List<Intervenant> Encadrants { get; set; } 
 
         public Matiere() //Constructeur par défaut
