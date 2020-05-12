@@ -79,6 +79,7 @@ namespace Catalogue
             string matiere = critmat as string;
             string mot = reader.ReadElementContentAsString(); //on dit que la valeur dans la balise MatiereProjet est un string
 
+            bool projetTrouve = false; //devient true si un projet correspondant est trouvé
             int i = 0; //compteur 
             //Je cherche si un projet correspond à la matière cherchée
             while (mot != matiere)
@@ -101,56 +102,64 @@ namespace Catalogue
                     Projet p = Catalogue_projets[i];
                     Console.WriteLine(p);
 
+                    projetTrouve = true;
                     return p;
-
                 }
                 i++; // ceci va nous aider à retrouver le projet plus tard
 
                 //retourner quelque chose si jamais il trouve pas
                 //ou alors ne proposerque des matières pour lesquelles on trouve un projet en fait, c'est plus intelligent mdr
             }
-
-
-            //Je ne vois pas comment gérer l'erreur si il n'y a pas de projet pour la matière sélectionnée
-
-            //Si un projet contient la matière recherchée, alors il faut créer un objet Matiere 
-            //(pour le placer dans les attributs du projet qu'on va renvoyer) -> problème à voir plus tard et qui ne va pas se poser si on réussit la désérialisation (cf la suite)
-
-            //Ci dessous plusieurs méthodes pour récupérer le projet à renvoyer
-
-            //Création d'un second reader qui ne contient que le projet étudié
-            //for (int j = 0; j < i; j++)
-            //{
-            //    reader.ReadToFollowing("Projet"); //on se déplace jusqu'au ième projet, càd celui qu'on cherche
-            //}
-
-            ////reader.MoveToContent();
-            //XmlReader inner = reader.ReadSubtree();
-
-            //inner.ReadToDescendant("nom");
-            //string nom = inner.Name;
-
-            //Essai d'une autre méthode : ReadInnerXml pour lire tout le contenu du noeud actuel et ainsi pouvoir créer le projet à renvoyer
-            //reader.MoveToContent(); //on revient au noeud
-            //reader.ReadToFollowing("Projet");
-            //string test = reader.ReadInnerXml();
-            //Console.WriteLine("Résultat : " + test);
-
-
-
-            ////Autre essai : désérialisation
-            //List<Projet> Catalogue_projets = new List<Projet>();
-            //XmlSerializer serializer = new XmlSerializer(typeof(List<Projet>)); //ne marche pas car la classe projet doit être public, mais non ça nous arrange pas
-            //StreamReader sr = new StreamReader("Catalogue_projets.xml");
-
-            //Catalogue_projets = (List<Projet>)serializer.Deserialize(sr);
-            //sr.Close();
-
-            //Projet p = Catalogue_projets[i];
-            //Console.WriteLine(p);
-
-            //return p;
+            if (!projetTrouve)
+            {
+                Console.WriteLine("Aucun projet ne correspond à cette recherche !");
+                Projet projetVide = new Projet();
+                return projetVide;
+            }
+            //Projet projetVide = new Projet("nom", 0, 0, "0", "semestres", "consigne", new List<Livrable>(), new Matiere(), new List<Intervenant>());//c'est juste pour les tests
+            //return projetVide;
         }
+
+        //Je ne vois pas comment gérer l'erreur si il n'y a pas de projet pour la matière sélectionnée
+
+        //Si un projet contient la matière recherchée, alors il faut créer un objet Matiere 
+        //(pour le placer dans les attributs du projet qu'on va renvoyer) -> problème à voir plus tard et qui ne va pas se poser si on réussit la désérialisation (cf la suite)
+
+        //Ci dessous plusieurs méthodes pour récupérer le projet à renvoyer
+
+        //Création d'un second reader qui ne contient que le projet étudié
+        //for (int j = 0; j < i; j++)
+        //{
+        //    reader.ReadToFollowing("Projet"); //on se déplace jusqu'au ième projet, càd celui qu'on cherche
+        //}
+
+        ////reader.MoveToContent();
+        //XmlReader inner = reader.ReadSubtree();
+
+        //inner.ReadToDescendant("nom");
+        //string nom = inner.Name;
+
+        //Essai d'une autre méthode : ReadInnerXml pour lire tout le contenu du noeud actuel et ainsi pouvoir créer le projet à renvoyer
+        //reader.MoveToContent(); //on revient au noeud
+        //reader.ReadToFollowing("Projet");
+        //string test = reader.ReadInnerXml();
+        //Console.WriteLine("Résultat : " + test);
+
+
+
+        ////Autre essai : désérialisation
+        //List<Projet> Catalogue_projets = new List<Projet>();
+        //XmlSerializer serializer = new XmlSerializer(typeof(List<Projet>)); //ne marche pas car la classe projet doit être public, mais non ça nous arrange pas
+        //StreamReader sr = new StreamReader("Catalogue_projets.xml");
+
+        //Catalogue_projets = (List<Projet>)serializer.Deserialize(sr);
+        //sr.Close();
+
+        //Projet p = Catalogue_projets[i];
+        //Console.WriteLine(p);
+
+        //return p;
+
 
 
         //public override Projet CritInterv(object critinterv)
