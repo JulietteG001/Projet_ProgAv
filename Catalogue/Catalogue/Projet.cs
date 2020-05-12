@@ -9,35 +9,38 @@ using System.IO;
 
 namespace Catalogue
 {
-    class Projet //: Consultation.ITrouvable 
+    class Projet : Consultation.ITrouvable //erreur ici normale tant qu'on a pas déclaré toutes les méthodes crées dans l'interface
     {
-        private string NomProjet { get; set; }
-        private int NbEleves { get; set; }
+        private string NomProjet { get; set; } //Nom du projet
+        private int NbEleves { get; set; } //Nombre d'élèves impliqués dans le projet
         private int Duree { get; set; } //Durée du projet en jours
-        private string Semestres { get; set; }
-        private string Consigne { get; set; }
-        private List<Livrable> Livrables { get; set; } 
-        private Matiere MatiereProjet { get; set; }
-        private List<Intervenant> Intervenants { get; set; } 
+        private string AnneeProjet { get; set; } //Année où s'est déroulé le projet (de la forme 20XX-20XX)
+        private string Semestres { get; set; } //Numéro des semestres où s'est déroulé le projet
+        private string Consigne { get; set; } //Consigne brève de ce que demande le projet
+        private List<Livrable> Livrables { get; set; } //Liste des livrables à fournir à terme du projet
+        private Matiere MatiereProjet { get; set; } //Matière concernée par le projet
+        private List<Intervenant> Intervenants { get; set; }  //Liste des intervenants au sein du projet (profs, externes, élèves)
 
         public Projet() //Constructeur par défaut
         {
             NomProjet = "";
             NbEleves = 0;
             Duree = 0;
+            AnneeProjet = "";
             Semestres = "";
             Consigne = "";
             Livrables = new List<Livrable>();
-            MatiereProjet = null;
+            MatiereProjet = null; //ATTENTION VARIABLE DECLAREE NULL C PAS OUF
             Intervenants = new List<Intervenant>();
         }
         
-        public Projet(string nomprojet, int nbEleves, int duree, string semestres, string consigne, List<Livrable> livrables, Matiere matiereProjet, List<Intervenant> intervenants) 
+        public Projet(string nomprojet, int nbEleves, int duree, string _anneeprojet, string semestres, string consigne, List<Livrable> livrables, Matiere matiereProjet, List<Intervenant> intervenants) 
         //Constructeur surchargé
         {
             NomProjet = nomprojet;
             NbEleves = nbEleves;
             Duree = duree;
+            AnneeProjet = _anneeprojet;
             Semestres = semestres;
             Consigne = consigne;
             Livrables = livrables;
@@ -46,7 +49,7 @@ namespace Catalogue
         }
         public override string ToString()
         {
-            string chRes = "Nom : " + NomProjet + " Nombre d'élèves: " + NbEleves + " Durée : " + Duree + " Semestres : " + Semestres + " Consigne : " + Consigne + " Livrables : " + Livrables + " Matière associée : " + MatiereProjet + " Intervenants : " + Intervenants;
+            string chRes = "Nom : " + NomProjet + " Nombre d'élèves: " + NbEleves + " Durée : " + Duree + " Année du projet : " + AnneeProjet +  " Semestres : " + Semestres + " Consigne : " + Consigne + " Livrables : " + Livrables + " Matière associée : " + MatiereProjet + " Intervenants : " + Intervenants;
             return chRes;
         }
 
@@ -70,7 +73,22 @@ namespace Catalogue
         public Projet CritMatiere(object critmat)
         //implémentation de l'interface pour trouver une matière
         {
-            XmlTextReader reader = new XmlTextReader("Catalogue_projets.xml");
+            XmlReader reader = XmlReader.Create("Catalogue_projets.xml"); //déclaration du xmlReader
+            reader.ReadToFollowing("MatiereProjet"); //on lit tous les éléments jusqu'à l'attribut MatiereProjet
+            string matiere = critmat as string;
+            string mot = reader.ReadElementContentAsString(); //on dit que la valeur dans la balise MatiereProjet est un string
+
+
+
+
+
+
+
+
+
+
+
+            XmlTextReader reader = new XmlTextReader("Catalogue_projets.xml"); //déclaration du xmlReader
             
             reader.ReadToFollowing("MatiereProjet");
 
@@ -83,7 +101,7 @@ namespace Catalogue
             {
                 reader.ReadToFollowing("MatiereProjet"); //On passe à la balise "matiere" suivante, càd on inspecte le projet suivant
                 mot = reader.ReadElementContentAsString();
-                i++; // ce i va nous aider à retrouver le projet plus tard
+                i++; // ceci va nous aider à retrouver le projet plus tard
             }
             //Je ne vois pas comment gérer l'erreur si il n'y a pas de projet pour la matière sélectionnée
 
@@ -109,6 +127,8 @@ namespace Catalogue
             //reader.ReadToFollowing("Projet");
             //string test = reader.ReadInnerXml();
             //Console.WriteLine("Résultat : " + test);
+
+
 
             //Autre essai : désérialisation
             List<Projet> Catalogue_projets = new List<Projet>();
@@ -142,7 +162,18 @@ namespace Catalogue
         //    }
         //}
 
-        ////implémentation de l'interface
+        public override Projet CritAnnee(object critannee)
+        //implémentation de l'interface pour trouver une année
+        {
+            string annee = critannee as string;
+            if (AnneeProjet == critannee as string) //on double le cast avec as, parce que sinon on fait ue comparaison de références et pas de types
+            {
+                return this;
+            }
+            //trouver comment retourner un message d'erreur
+        }
+
+
         //public override bool Critere(object attrrech, object critrech)
         ////recherche dans les projets si le critère de recherche entré fait partie des attributs du projet
         //{

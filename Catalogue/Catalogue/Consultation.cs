@@ -69,6 +69,7 @@ namespace Catalogue
             Projet CritLivrable(Object critlivr);
             Projet CritMatiere(Object critmat);
             Projet CritInterv(Object critinterv);
+            Projet CritAnnee(Object critannee);
         }
     }
 }
