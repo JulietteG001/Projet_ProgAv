@@ -12,10 +12,10 @@ namespace Catalogue
         {
             Console.WriteLine("Entrez le numéro correspondant à votre critère de recherche : \n" +
                 "1. Par projet\n" +
-                "2. Par matière\n" +
+                "2. Par matière\n" + //OK INTERFACE
                 "3. Par intervenant\n" + 
-                "4. Par type de livrable\n" +
-                "5. Par année\n");
+                "4. Par type de livrable\n" + //OK INTERFACE
+                "5. Par année\n"); //OK INTERFACE
             int num = int.Parse(Console.ReadLine());
 
             if (num == 1)
