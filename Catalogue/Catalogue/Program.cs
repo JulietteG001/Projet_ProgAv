@@ -16,12 +16,17 @@ namespace Catalogue
             Projet p = new Projet();
             //Console.WriteLine(p.CritMatiere("test").ToString());
             List<Projet> ps = new List<Projet>();
-            ps = p.CritMatiere("Introduction à la programmation");
+            ps = p.CritLivrable("Code source");
 
             foreach (Projet s in ps) //Pour vérifier ce que contient la liste renvoyée par CriMatiere pendant les tests
             {
-                Console.WriteLine(s.ToString());
+                //Console.WriteLine(s.ToString());
+                foreach (Livrable l in s.Livrables) //Pour regarder ce que contient la liste de livrables de chaque projet
+                {
+                    Console.WriteLine(l.ToString());
+                }
             }
+            
             Console.ReadLine();
         }
     }
