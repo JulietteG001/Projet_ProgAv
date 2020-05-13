@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Catalogue
 {
-    abstract class Intervenant
+   public  abstract class Intervenant
     //abstraite car un intervenant tout seul n'existe pas en lui-même.
     //on lui applique donc l'étiquette élève, enseignant, ou intervenant extérieur via des classes héritières.
     {

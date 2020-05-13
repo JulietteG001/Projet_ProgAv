@@ -9,7 +9,7 @@ using System.IO;
 
 namespace Catalogue
 {
-    public class Projet : Consultation.ITrouvable //erreur ici normale tant qu'on a pas déclaré toutes les méthodes crées dans l'interface
+    public class Projet //: Consultation.ITrouvable //erreur ici normale tant qu'on a pas déclaré toutes les méthodes crées dans l'interface
     {
         public string NomProjet { get; set; } //Nom du projet
         public int NbEleves { get; set; } //Nombre d'élèves impliqués dans le projet
@@ -49,8 +49,18 @@ namespace Catalogue
         }
         public override string ToString()
         {
-            string chRes = "Nom : " + NomProjet + " Nombre d'élèves: " + NbEleves + " Durée : " + Duree + " Année du projet : " + AnneeProjet +  " Semestres : " + Semestres + " Consigne : " + Consigne + " Livrables : " + Livrables + " Matière associée : " + MatiereProjet + " Intervenants : " + Intervenants;
+            string chRes = "Nom : " + NomProjet + "\nNombre d'élèves: " + NbEleves + "\nDurée : " + Duree + "\nAnnée du projet : " + AnneeProjet +  "\nSemestres : " + Semestres + "\nConsigne : " + Consigne + "\nLivrables : " + Livrables + "\nMatière associée : " + MatiereProjet + "\nIntervenants : " + Intervenants;
             return chRes;
+        }
+        public List<Projet> Deserialiser()
+        {
+            List<Projet> Catalogue_projets = new List<Projet>();
+            XmlSerializer serializer = new XmlSerializer(typeof(List<Projet>));
+            StreamReader sr = new StreamReader("Catalogue_projets.xml");
+
+            Catalogue_projets = (List<Projet>)serializer.Deserialize(sr);
+            sr.Close();
+            return Catalogue_projets;
         }
 
         //public override Projet CritLivrable(object critlivr)
@@ -71,61 +81,39 @@ namespace Catalogue
         //    }
         //}
 
-        public Projet CritMatiere(object critmat)
+        public List<Projet> CritMatiere(object critmat)
         //implémentation de l'interface pour trouver une matière
         {
-            XmlReader reader = XmlReader.Create("Catalogue_projets.xml"); //déclaration du xmlReader
-            reader.ReadToFollowing("MatiereProjet"); //on lit tous les éléments jusqu'à l'attribut MatiereProjet
-            string matiere = critmat as string;
-            string mot = reader.ReadElementContentAsString(); //on dit que la valeur dans la balise MatiereProjet est un string
+            List<Projet> Catalogue_projets = this.Deserialiser();//Désérialisation de notre fichier xml contenant les projets
 
-            bool projetTrouve = false; //devient true si un projet correspondant est trouvé
+            XmlReader reader = XmlReader.Create("Catalogue_projets.xml"); //déclaration du xmlReader
+
+            string matiere = critmat as string;
             int i = 0; //compteur 
-            //Je cherche si un projet correspond à la matière cherchée
-            while (mot != matiere)
+            List<Projet> projetsTrouves = new List<Projet>(); //liste qui contiendra nos résultats
+            
+            //Recherche du ou des projets concerné(s) par le critère
+            while (i<3) //tant qu'on a pas regardé tous les projets, ça serait bien de rajouter une variable NbProjets (nombre de projets dans notre fichier xml)
             {
                 reader.ReadToFollowing("MatiereProjet"); //On passe à la balise "matiere" suivante, càd on inspecte le projet suivant
-                mot = reader.ReadElementContentAsString();
+                string mot = reader.ReadElementContentAsString();//on dit que la valeur dans la balise MatiereProjet est un string
 
                 //pour chaque projet, on regarde si dans la liste des matières, matiere == mot
                 if (mot == matiere)
                 {
                     //si oui, on récupère le projet et on range tous ses attributs dans un objet de la classe Projet
                     //on fait une liste pour y ranger les projets
-                    List<Projet> Catalogue_projets = new List<Projet>();
-                    XmlSerializer serializer = new XmlSerializer(typeof(List<Projet>));
-                    StreamReader sr = new StreamReader("Catalogue_projets.xml");
-
-                    Catalogue_projets = (List<Projet>)serializer.Deserialize(sr);
-                    sr.Close();
-
-                    Projet p = Catalogue_projets[i];
-                    Console.WriteLine(p);
-
-                    projetTrouve = true;
-                    return p;
+                    projetsTrouves.Add(Catalogue_projets[i]);
                 }
-                i++; // ceci va nous aider à retrouver le projet plus tard
-
+                i++;
                 //retourner quelque chose si jamais il trouve pas
                 //ou alors ne proposerque des matières pour lesquelles on trouve un projet en fait, c'est plus intelligent mdr
             }
-            if (!projetTrouve)
-            {
-                Console.WriteLine("Aucun projet ne correspond à cette recherche !");
-                Projet projetVide = new Projet();
-                return projetVide;
-            }
-            //Projet projetVide = new Projet("nom", 0, 0, "0", "semestres", "consigne", new List<Livrable>(), new Matiere(), new List<Intervenant>());//c'est juste pour les tests
-            //return projetVide;
+            return projetsTrouves;
         }
 
-        //Je ne vois pas comment gérer l'erreur si il n'y a pas de projet pour la matière sélectionnée
-
-        //Si un projet contient la matière recherchée, alors il faut créer un objet Matiere 
-        //(pour le placer dans les attributs du projet qu'on va renvoyer) -> problème à voir plus tard et qui ne va pas se poser si on réussit la désérialisation (cf la suite)
-
-        //Ci dessous plusieurs méthodes pour récupérer le projet à renvoyer
+    
+        //Ci dessous plusieurs méthodes pour récupérer le projet à renvoyer (je les laisse au cas où)
 
         //Création d'un second reader qui ne contient que le projet étudié
         //for (int j = 0; j < i; j++)
@@ -144,7 +132,6 @@ namespace Catalogue
         //reader.ReadToFollowing("Projet");
         //string test = reader.ReadInnerXml();
         //Console.WriteLine("Résultat : " + test);
-
 
 
         ////Autre essai : désérialisation

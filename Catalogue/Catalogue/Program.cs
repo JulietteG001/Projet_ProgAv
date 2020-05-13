@@ -14,7 +14,14 @@ namespace Catalogue
             //consultation.AffinerLaRecherche();
 
             Projet p = new Projet();
-            Console.WriteLine(p.CritMatiere("Introduction à la programmation").ToString());
+            //Console.WriteLine(p.CritMatiere("test").ToString());
+            List<Projet> ps = new List<Projet>();
+            ps = p.CritMatiere("Introduction à la programmation");
+
+            foreach (Projet s in ps) //Pour vérifier ce que contient la liste renvoyée par CriMatiere pendant les tests
+            {
+                Console.WriteLine(s.ToString());
+            }
             Console.ReadLine();
         }
     }
