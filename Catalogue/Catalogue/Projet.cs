@@ -49,7 +49,7 @@ namespace Catalogue
         }
         public override string ToString()
         {
-            string chRes = "Nom : " + NomProjet + "\nNombre d'élèves: " + NbEleves + "\nDurée : " + Duree + "\nAnnée du projet : " + AnneeProjet +  "\nSemestres : " + Semestres + "\nConsigne : " + Consigne + "\nLivrables : " + Livrables + "\nMatière associée : " + MatiereProjet + "\nIntervenants : " + Intervenants;
+            string chRes = "Nom : " + NomProjet + "\nNombre d'élèves: " + NbEleves + "\nDurée (en jours) : " + Duree + "\nAnnée du projet : " + AnneeProjet +  "\nSemestres : " + Semestres + "\nConsigne : " + Consigne + "\nLivrables : " + Livrables + "\nMatière associée : " + MatiereProjet + "\nIntervenants : " + Intervenants;
             return chRes;
         }
         public List<Projet> Deserialiser()
@@ -74,10 +74,6 @@ namespace Catalogue
             List<Projet> Catalogue_projets = this.Deserialiser();//Désérialisation de notre fichier xml contenant les projets
             XmlReader reader = XmlReader.Create("Catalogue_projets.xml"); //déclaration du xmlReader
 
-            //faut sortir tous les projets du fichier XML, les mettre dans une liste de projets et n'en afficher que le titre du coup
-            //Lu'ilisateur doit pouvoir choisir celui qu'il veut voir
-            //à faire dans une méthode pour affiner la recherche (avec numéro)
-
             string nomProjet = critProj as string;
             int i = 0; //compteur 
             List<Projet> projetsTrouvesProj = new List<Projet>(); //liste qui contiendra nos résultats
@@ -86,13 +82,15 @@ namespace Catalogue
             while (i < 3) //tant qu'on a pas regardé tous les projets, ça serait bien de rajouter une variable NbProjets (nombre de projets dans notre fichier xml)
             {
                 reader.ReadToFollowing("NomProjet"); //On passe à la balise "matiere" suivante, càd on inspecte le projet suivant
-                string mot = reader.ReadElementContentAsString();//on dit que la valeur dans la balise MatiereProjet est un string
+                string mot = reader.ReadElementContentAsString();//on dit que la valeur dans la balise NomProjet est un string
 
                 if (mot == nomProjet)
                 {
                     //si oui, on récupère le projet et on range tous ses attributs dans un objet de la classe Projet
                     //on fait une liste pour y ranger les projets
                     projetsTrouvesProj.Add(Catalogue_projets[i]);
+                    Console.WriteLine("Projet ajouté !"); //test de fonctionnement, à supprimer
+
                 }
                 i++;
                 //retourner quelque chose si jamais il trouve pas
@@ -115,14 +113,15 @@ namespace Catalogue
             //Recherche du ou des projets concerné(s) par le critère
             while (i < 3) //tant qu'on a pas regardé tous les projets, ça serait bien de rajouter une variable NbProjets (nombre de projets dans notre fichier xml)
             {
-                reader.ReadToFollowing("Livrables"); //On passe à la balise "Livrables" suivante ou on inspecte le projet suivant
-                string mot = reader.ReadElementContentAsString();//on dit que la valeur dans la balise Livrables est un string
+                reader.ReadToFollowing("Nature"); //On passe à la balise "Nature" suivante ou on inspecte le projet suivant
+                string mot = reader.ReadElementContentAsString();//on dit que la valeur dans la balise Nature est un string
                 //pour chaque projet, on regarde si dans la liste des livrables, livrable == mot
                 if (mot == livrable)
                 {
                     //si oui, on récupère le projet et on range tous ses attributs dans un objet de la classe Projet
                     //on fait une liste pour y ranger les projets
                     projetsTrouvesLivr.Add(Catalogue_projets[i]);
+                    Console.WriteLine("Projet ajouté !"); //test de fonctionnement, à supprimer
                 }
                 i++;
                 //retourner quelque chose si jamais il trouve pas
@@ -153,6 +152,7 @@ namespace Catalogue
                     //si oui, on récupère le projet et on range tous ses attributs dans un objet de la classe Projet
                     //on fait une liste pour y ranger les projets
                     projetsTrouvesMat.Add(Catalogue_projets[i]);
+                    Console.WriteLine("Projet ajouté !"); //test de fonctionnement, à supprimer
                 }
                 i++;
                 //retourner quelque chose si jamais il trouve pas
@@ -185,6 +185,7 @@ namespace Catalogue
                     //si oui, on récupère le projet et on range tous ses attributs dans un objet de la classe Projet
                     //on fait une liste pour y ranger les projets
                     projetsTrouvesAnnee.Add(Catalogue_projets[i]);
+                    Console.WriteLine("Projet ajouté !"); //test de fonctionnement, à supprimer
                 }
                 i++;
                 //retourner quelque chose si jamais il trouve pas
