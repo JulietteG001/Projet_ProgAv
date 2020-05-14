@@ -57,7 +57,15 @@ namespace Catalogue
                 //dans les projets, on a pas les années mais les semestres. Comment on fait ?
             }
         }
-
+        public void AfficherResultat(List<Projet> projets)
+        {
+            Console.WriteLine("=====================Résultats de la recherche=====================\n");
+            foreach(Projet p in projets)
+            {
+                Console.WriteLine(p.ToString());
+                Console.WriteLine("\n------------------------\n");
+            }
+        }
         public interface ITrouvable
         {
             //l'interface se charge de regarder si, pour un des critères de recherche, 

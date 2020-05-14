@@ -49,7 +49,16 @@ namespace Catalogue
         }
         public override string ToString()
         {
-            string chRes = "Nom : " + NomProjet + "\nNombre d'élèves: " + NbEleves + "\nDurée (en jours) : " + Duree + "\nAnnée du projet : " + AnneeProjet +  "\nSemestres : " + Semestres + "\nConsigne : " + Consigne + "\nLivrables : " + Livrables + "\nMatière associée : " + MatiereProjet + "\nIntervenants : " + Intervenants;
+            string chRes = "Nom : " + NomProjet + "\nNombre d'élèves: " + NbEleves + "\nDurée (en jours) : " + Duree + "\nAnnée du projet : " + AnneeProjet + "\nSemestres : " + Semestres + "\nConsigne : " + Consigne + "\nLivrables : ";
+            foreach (Livrable l in this.Livrables) //On ajoute la liste des livrables à la chaîne
+            {
+                chRes += l.Nature + ", ";
+            }
+            chRes += "\nMatière associée : " + MatiereProjet.ToString() + "\nIntervenants : ";
+            foreach (Intervenant i in this.Intervenants) //On ajoute la liste des intervenants à la chaîne
+            {
+                chRes += i.ToString() + ", ";
+            }
             return chRes;
         }
         public List<Projet> Deserialiser()
@@ -90,7 +99,6 @@ namespace Catalogue
                     //on fait une liste pour y ranger les projets
                     projetsTrouvesProj.Add(Catalogue_projets[i]);
                     Console.WriteLine("Projet ajouté !"); //test de fonctionnement, à supprimer
-
                 }
                 i++;
                 //retourner quelque chose si jamais il trouve pas
@@ -114,18 +122,22 @@ namespace Catalogue
             while (i < 3) //tant qu'on a pas regardé tous les projets, ça serait bien de rajouter une variable NbProjets (nombre de projets dans notre fichier xml)
             {
                 reader.ReadToFollowing("Nature"); //On passe à la balise "Nature" suivante ou on inspecte le projet suivant
+                //reader.ReadToFollowing("Livrables");
+
                 string mot = reader.ReadElementContentAsString();//on dit que la valeur dans la balise Nature est un string
+                Console.WriteLine(i);
+                Console.WriteLine(mot);
+
                 //pour chaque projet, on regarde si dans la liste des livrables, livrable == mot
                 if (mot == livrable)
                 {
                     //si oui, on récupère le projet et on range tous ses attributs dans un objet de la classe Projet
                     //on fait une liste pour y ranger les projets
-                    projetsTrouvesLivr.Add(Catalogue_projets[i]);
+                    //projetsTrouvesLivr.Add(Catalogue_projets[i]);
+                    
                     Console.WriteLine("Projet ajouté !"); //test de fonctionnement, à supprimer
                 }
                 i++;
-                //retourner quelque chose si jamais il trouve pas
-                //ou alors ne proposer que des matières pour lesquelles on trouve un projet en fait, c'est plus intelligent mdr
             }
             return projetsTrouvesLivr;
         }

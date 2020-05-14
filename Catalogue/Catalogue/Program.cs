@@ -14,12 +14,13 @@ namespace Catalogue
             //consultation.AffinerLaRecherche();
 
             Projet p = new Projet();
-            Console.WriteLine(p.CritMatiere("test"));
+            
             List<Projet> ps = new List<Projet>();
 
 
-            ps = p.CritLivrable("Code source");
-            //ps = p.CritAnnee("2019-2020");
+            //ps = p.CritLivrable("Code source");
+            ps = p.CritAnnee("2019-2020");
+            consultation.AfficherResultat(ps);
             //ps = p.CritProjet("Projet Blackout");
             //ps = p.CritLivrable("Rapport");
 
@@ -29,8 +30,9 @@ namespace Catalogue
             {
                 foreach (Livrable l in s.Livrables) //Pour regarder ce que contient la liste de livrables de chaque projet
                 {
-                    Console.WriteLine(l.Nature.ToString());
+                    //Console.WriteLine(l.Nature.ToString());
                 }
+               //Console.WriteLine(s);
             }
 
             Console.ReadLine();
