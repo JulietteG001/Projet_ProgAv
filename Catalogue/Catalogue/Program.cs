@@ -11,7 +11,7 @@ namespace Catalogue
         static void Main(string[] args)
         {
             Consultation consultation = new Consultation();
-            //consultation.AffinerLaRecherche();
+            consultation.AffinerLaRecherche();
 
             Projet p = new Projet();
             
@@ -19,8 +19,9 @@ namespace Catalogue
 
 
             //ps = p.CritLivrable("Code source");
-            ps = p.CritAnnee("2019-2020");
-            consultation.AfficherResultat(ps);
+            //ps = p.CritAnnee("2019-2020");
+            //consultation.AfficherResultat(ps);
+
             //ps = p.CritProjet("Projet Blackout");
             //ps = p.CritLivrable("Rapport");
 

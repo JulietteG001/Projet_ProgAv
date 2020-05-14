@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Serialization;
-using System.IO;
+using System.Xml; //Pour utiliser XmlReader
+using System.Xml.Serialization; //Pour utiliser XmlSerializer
+using System.IO; //Pour utiliser StreamReader
 
 namespace Catalogue
 {

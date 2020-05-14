@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml; //Pour utiliser XmlReader
 
 namespace Catalogue
 {
@@ -17,18 +18,50 @@ namespace Catalogue
                 "4. Par type de livrable\n" +
                 "5. Par année\n"); //OK INTERFACE
             int num = int.Parse(Console.ReadLine());
+            Console.Clear();
 
-            if (num == 1)
-            {
-                Console.WriteLine("Par projet");
-            }
-            if (num == 1)
-            {
-                //On liste tous les projets en prenant comme référence le nom de chaque projet
-                //l'utilisateur devra à nouveau taper un chiffre pour sélectionner le projet
-                //le projet s'affichera en entier (Méthode ToString ? Autre méthode ? Pas bsoin d'utiliser l'interface à mon avis)
-            }
+            XmlReader reader = XmlReader.Create("Catalogue_projets.xml"); //déclaration du XmlReader
+            List<string> listeAffichage = new List<string>();
+            bool dejaAffiche = false;
 
+            if (num == 1) //Si la recherche se fait par projet
+            {
+                int j = 0;
+
+                //Recherche de tous les noms de projets possibles
+                while (j < 3) //Encore une fois, rajouter une variable nbProjets ?
+                {
+                    reader.ReadToFollowing("NomProjet"); 
+                    string nom = reader.ReadElementContentAsString();
+                    foreach(string element in listeAffichage) 
+                        //on vérifie si le nom rencontré n'a pas déjà été rencontré
+                        //j'ai donc fait l'hypothèse que 2 projets peuvent avoir le même nom, c'est peut-être débile x)
+                    {
+                        if(element == nom)
+                        {
+                            dejaAffiche = true; //le nom a déjà été entré dans la liste de choses à afficher 
+                        }
+                    }
+                    if (!dejaAffiche) //si le nom n'a jamais été rencontré
+                    {
+                        listeAffichage.Add(nom); //on l'ajoute dans la liste des choses à afficher
+                    }
+                    j++;
+                }
+
+                //Affichage de tous les noms de projets
+                Console.WriteLine("=========== Recherche par projet ===========\n");
+                Console.WriteLine("Entrez du projet recherché pour obtenir plus de détails : \n");
+                int i = 1;
+                foreach (string element in listeAffichage)
+                {
+                    Console.WriteLine(i + ". " + element);
+                    i++;
+                }
+                int num2 = int.Parse(Console.ReadLine()); //l'utilisateur choisit le projet dont il veut plus de détails
+                Console.WriteLine(listeAffichage[num2 - 1]); //pour les tests, je laisse le return en commentaire
+                //return listeAffichage[num2 - 1]; //Retourne donc un string -> les méthodes Crit prennent donc un string en entrée ?
+            }
             if (num == 2)
             {
                 Console.WriteLine("Par matière");
@@ -59,7 +92,7 @@ namespace Catalogue
         }
         public void AfficherResultat(List<Projet> projets)
         {
-            Console.WriteLine("=====================Résultats de la recherche=====================\n");
+            Console.WriteLine("======================== Résultats de la recherche ========================\n");
             foreach(Projet p in projets)
             {
                 Console.WriteLine(p.ToString());
