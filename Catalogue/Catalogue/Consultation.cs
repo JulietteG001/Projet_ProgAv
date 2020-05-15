@@ -22,15 +22,15 @@ namespace Catalogue
 
             XmlReader reader = XmlReader.Create("Catalogue_projets.xml"); //déclaration du XmlReader
             List<string> listeAffichage = new List<string>();
-            bool dejaAffiche = false;
 
             if (num == 1) //Si la recherche se fait par projet
             {
                 int j = 0;
 
                 //Recherche de tous les noms de projets possibles
-                while (j < 3) //Encore une fois, rajouter une variable nbProjets ?
+                while (j < 3) //PB ici on peut pas utiliser CompteProjets(), ou alors cette méthode prend en entrée CompteProjets()
                 {
+                    bool dejaAffiche = false;
                     reader.ReadToFollowing("NomProjet"); 
                     string nom = reader.ReadElementContentAsString();
                     foreach(string element in listeAffichage) 
@@ -64,12 +64,47 @@ namespace Catalogue
 
             // PREVOIR DES MESSAGES D'ERRREUR SI ON ENTRE PAS LE BON TRUC 
             }
+
             if (num == 2)
             {
-                Console.WriteLine("Par matière");
                 //afficher l'ensemble des matières pour lesquelles on a des projets (+ 1 ou on en a pas pour les messages d'erreur)
                 //l'utilisateur devra à nouveau taper un chiffre pour sélectionner la matière
                 //C'est l'interface qui prend le reste en main avec une méthode pour sortir les projets par matière
+                int j = 0;
+
+                //Recherche de toutes les matières possibles
+                while (j < 3) //PB ici on peut pas utiliser CompteProjets(), ou alors cette méthode prend en entrée CompteProjets()
+                {
+                    bool dejaAffiche = false;
+                    reader.ReadToFollowing("NomMat");
+                    string mat = reader.ReadElementContentAsString();
+                    foreach (string element in listeAffichage)
+                    //on vérifie si la matière rencontrée n'a pas déjà été rencontrée
+                    {
+                        if (element == mat)
+                        {
+                            dejaAffiche = true; //la matière a déjà été entrée dans la liste de choses à afficher 
+                        }
+                    }
+                    if (!dejaAffiche) //si l'année n'a jamais été rencontrée
+                    {
+                        listeAffichage.Add(mat); //on l'ajoute dans la liste des choses à afficher
+                    }
+                    j++;
+                }
+
+                //Affichage de toutes les matières
+                Console.WriteLine("=========== Recherche par matière ===========\n");
+                Console.WriteLine("Entrez le numéro de la matière recherchée pour obtenir les projets associés : \n");
+                int i = 1;
+                foreach (string element in listeAffichage)
+                {
+                    Console.WriteLine(i + ". " + element);
+                    i++;
+                }
+                int num2 = int.Parse(Console.ReadLine()); //l'utilisateur choisit le projet dont il veut plus de détails
+                Console.WriteLine(listeAffichage[num2 - 1]); //pour les tests, je laisse le return en commentaire
+                //return listeAffichage[num2 - 1];
             }
 
             if (num == 3)
@@ -89,7 +124,41 @@ namespace Catalogue
 
             if (num == 5)
             {
-                //dans les projets, on a pas les années mais les semestres. Comment on fait ?
+                int j = 0;
+
+                //Recherche de toutes les années possibles
+                while (j < 3) 
+                {
+                    bool dejaAffiche = false;
+                    reader.ReadToFollowing("AnneeProjet");
+                    string annee = reader.ReadElementContentAsString();
+                    foreach (string element in listeAffichage)
+                    //on vérifie si l'année rencontrée n'a pas déjà été ajoutée à la liste d'affichage
+                    {
+                        if (element == annee)
+                        {
+                            dejaAffiche = true; //l'année a déjà été entrée dans la liste de choses à afficher 
+                        }
+                    }
+                    if (!dejaAffiche) //si l'année n'a jamais été rencontrée
+                    {
+                        listeAffichage.Add(annee); //on l'ajoute dans la liste des choses à afficher
+                    }
+                    j++;
+                }
+
+                //Affichage de toutes les années
+                Console.WriteLine("=========== Recherche par année ===========\n");
+                Console.WriteLine("Entrez le numéro de l'année recherchée pour obtenir les projets associés : \n");
+                int i = 1;
+                foreach (string element in listeAffichage)
+                {
+                    Console.WriteLine(i + ". " + element);
+                    i++;
+                }
+                int num2 = int.Parse(Console.ReadLine()); //l'utilisateur choisit le projet dont il veut plus de détails
+                Console.WriteLine(listeAffichage[num2 - 1]); //pour les tests, je laisse le return en commentaire
+                //return listeAffichage[num2 - 1];
             }
         }
         public void AfficherResultat(List<Projet> projets)

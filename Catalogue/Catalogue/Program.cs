@@ -16,9 +16,10 @@ namespace Catalogue
             Projet p = new Projet();
             List<Projet> ps = new List<Projet>();
 
-            ps = p.CritMatiere("Introduction à la programmation");
+            ps = p.CritIntervenant("Pesquet");
+            //ps = p.CritMatiere("Introduction à la programmation");
             //ps = p.CritAnnee("2019-2020");
-            //consultation.AfficherResultat(ps);
+            consultation.AfficherResultat(ps);
 
             //ps = p.CritProjet("Projet Blackout");
             //ps = p.CritLivrable("Rapport");
@@ -27,11 +28,10 @@ namespace Catalogue
 
             foreach (Projet s in ps) //Pour vérifier ce que contient la liste renvoyée par CritMatiere pendant les tests
             {
-                //    foreach (Livrable l in s.Livrables) //Pour regarder ce que contient la liste de livrables de chaque projet
-                //    {
-                //        //Console.WriteLine(l.Nature.ToString());
-                //    }
-                Console.WriteLine(s);
+                foreach (Intervenant i in s.Intervenants) //Pour regarder ce que contient la liste d'intervenants de chaque projet
+                {
+                    Console.WriteLine("Nom : "+i.NomInterv.ToString());
+                }
             }
 
             Console.ReadLine();

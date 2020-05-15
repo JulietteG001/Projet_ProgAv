@@ -26,7 +26,7 @@ namespace Catalogue
         }
         public override string ToString()
         {
-            string chRes = "Nom : " + NomMat + " Coefficient : " + Coefficient + " Encadrants : " + Encadrants;
+            string chRes = "\n       Nom : " + NomMat + "\n       Coefficient : " + Coefficient + "\n       Encadrants : " + Encadrants;
             return chRes;
         }
     }

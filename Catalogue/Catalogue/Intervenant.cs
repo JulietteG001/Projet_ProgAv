@@ -32,7 +32,7 @@ namespace Catalogue
 
         public override string ToString()
         {
-            string chRes = "Nom : " + NomInterv + " Prénom : " + Prenom + " Rôle : " + Role;
+            string chRes = "\n       Nom : " + NomInterv + "\n       Prénom : " + Prenom + "\n       Rôle : " + Role;
             return chRes;
         }
     }

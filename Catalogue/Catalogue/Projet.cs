@@ -19,7 +19,7 @@ namespace Catalogue
         public string Consigne { get; set; } //Consigne brève de ce que demande le projet
         public List<Livrable> Livrables { get; set; } //Liste des livrables à fournir à terme du projet
         public Matiere MatiereProjet { get; set; } //Matière concernée par le projet
-        private List<Intervenant> Intervenants { get; set; }  //Liste des intervenants au sein du projet (profs, externes, élèves)
+        public List<Intervenant> Intervenants { get; set; }  //Liste des intervenants au sein du projet (profs, externes, élèves)
 
         public Projet() //Constructeur par défaut
         {
@@ -54,7 +54,7 @@ namespace Catalogue
             {
                 chRes += l.Nature + " | ";
             }
-            chRes += "\nMatière associée : " + MatiereProjet.NomMat + "\nCoefficient : " + MatiereProjet.Coefficient + "\nIntervenants : ";
+            chRes += "\nMatière associée : " + MatiereProjet.ToString() + "\nIntervenants : ";
             foreach (Intervenant i in this.Intervenants) //On ajoute la liste des intervenants à la chaîne
             {
                 chRes += i.ToString() + " | ";
@@ -99,7 +99,7 @@ namespace Catalogue
             List<Projet> projetsTrouvesProj = new List<Projet>(); //liste qui contiendra nos résultats
 
             //Recherche du ou des projets concerné(s) par le critère
-            while (i < 3) //tant qu'on a pas regardé tous les projets, ça serait bien de rajouter une variable NbProjets (nombre de projets dans notre fichier xml)
+            while (i < CompteProjets()) //tant qu'on a pas regardé tous les projets
             {
                 reader.ReadToFollowing("NomProjet"); //On passe à la balise "NomProjet" suivante, càd on inspecte le projet suivant
                 string mot = reader.ReadElementContentAsString();//on dit que la valeur dans la balise NomProjet est un string
@@ -126,7 +126,7 @@ namespace Catalogue
             List<Projet> projetsTrouvesLivr = new List<Projet>(); //liste qui contiendra nos résultats
 
             //Recherche du ou des projets concerné(s) par le critère
-            while (i < 3)
+            while (i < CompteProjets())
             {
                 reader.ReadToFollowing("Nature"); //On passe à la balise "Nature" suivante ou on inspecte le projet suivant
                 //reader.ReadToFollowing("Livrables");
@@ -156,7 +156,7 @@ namespace Catalogue
             List<Projet> projetsTrouvesMat = new List<Projet>(); //liste qui contiendra nos résultats
             
             //Recherche du ou des projets concerné(s) par le critère
-            while (i<3)
+            while (i < CompteProjets())
             {
                 reader.ReadToFollowing("NomMat"); //On passe à la balise "matiere" suivante, càd on inspecte le projet suivant
                 string mot = reader.ReadElementContentAsString();
@@ -184,7 +184,7 @@ namespace Catalogue
             List<Projet> projetsTrouvesAnnee = new List<Projet>(); //liste qui contiendra nos résultats
 
             //Recherche du ou des projets concerné(s) par le critère
-            while (i < 3)
+            while (i < CompteProjets())
             {
                 reader.ReadToFollowing("AnneeProjet"); //On passe à la balise "AnneeProjet" suivante, càd on inspecte le projet suivant
                 string mot = reader.ReadElementContentAsString();
@@ -201,7 +201,36 @@ namespace Catalogue
             return projetsTrouvesAnnee;
         }
 
+        public List<Projet> CritIntervenant(object critInterv)
+        //implémentation de l'interface pour trouver un type de livrable
+        {
+            List<Projet> Catalogue_projets = this.Deserialiser();
+            XmlReader reader = XmlReader.Create("Catalogue_projets.xml");
 
+            string intervenant = critInterv as string;
+            int i = 0; //compteur
+            List<Projet> projetsTrouvesInterv = new List<Projet>(); //liste qui contiendra nos résultats
+
+            //Recherche du ou des projets concerné(s) par le critère
+            while (i < 1)
+            {
+                reader.ReadToFollowing("NomInterv"); //On passe à la balise "Nature" suivante ou on inspecte le projet suivant
+                //reader.ReadToFollowing("Intervenant");
+
+                string mot = reader.ReadElementContentAsString();
+                //pour chaque projet, on regarde si dans la liste des livrables, livrable == mot
+                if (mot == intervenant)
+                {
+                    //si oui, on récupère le projet et on range tous ses attributs dans un objet de la classe Projet
+                    //on fait une liste pour y ranger les projets
+                    projetsTrouvesInterv.Add(Catalogue_projets[i]);
+                    //Console.WriteLine(Catalogue_projets[i].Intervenants[0]);
+                    Console.WriteLine("Projet ajouté !"); //test de fonctionnement, à supprimer
+                }
+                i++;
+            }
+            return projetsTrouvesInterv;
+        }
 
 
 
