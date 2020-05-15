@@ -52,15 +52,25 @@ namespace Catalogue
             string chRes = "Nom : " + NomProjet + "\nNombre d'élèves: " + NbEleves + "\nDurée (en jours) : " + Duree + "\nAnnée du projet : " + AnneeProjet + "\nSemestres : " + Semestres + "\nConsigne : " + Consigne + "\nLivrables : ";
             foreach (Livrable l in this.Livrables) //On ajoute la liste des livrables à la chaîne
             {
-                chRes += l.Nature + ", ";
+                chRes += l.Nature + " | ";
             }
-            chRes += "\nMatière associée : " + MatiereProjet.ToString() + "\nIntervenants : ";
+            chRes += "\nMatière associée : " + MatiereProjet.NomMat + "\nCoefficient : " + MatiereProjet.Coefficient + "\nIntervenants : ";
             foreach (Intervenant i in this.Intervenants) //On ajoute la liste des intervenants à la chaîne
             {
-                chRes += i.ToString() + ", ";
+                chRes += i.ToString() + " | ";
             }
             return chRes;
         }
+
+        public int CompteProjets()
+        //compte le nb de projets contenus dans le dossier XML via désérialisation
+        {
+            int nbProjets = 0; 
+            List<Projet> Catalogue_projets = this.Deserialiser();//Désérialisation de notre fichier xml contenant les projets
+            nbProjets = Catalogue_projets.Count;
+            return nbProjets;
+        }
+
         public List<Projet> Deserialiser()
         //Désérialise le contenu du fichier XML contenant les projets
         {
@@ -79,6 +89,7 @@ namespace Catalogue
         }
 
         public List<Projet> CritProjet(object critProj)
+        //implémentation de l'interface pour trouver tous les projets
         {
             List<Projet> Catalogue_projets = this.Deserialiser();//Désérialisation de notre fichier xml contenant les projets
             XmlReader reader = XmlReader.Create("Catalogue_projets.xml"); //déclaration du xmlReader
@@ -90,51 +101,43 @@ namespace Catalogue
             //Recherche du ou des projets concerné(s) par le critère
             while (i < 3) //tant qu'on a pas regardé tous les projets, ça serait bien de rajouter une variable NbProjets (nombre de projets dans notre fichier xml)
             {
-                reader.ReadToFollowing("NomProjet"); //On passe à la balise "matiere" suivante, càd on inspecte le projet suivant
+                reader.ReadToFollowing("NomProjet"); //On passe à la balise "NomProjet" suivante, càd on inspecte le projet suivant
                 string mot = reader.ReadElementContentAsString();//on dit que la valeur dans la balise NomProjet est un string
 
                 if (mot == nomProjet)
                 {
                     //si oui, on récupère le projet et on range tous ses attributs dans un objet de la classe Projet
-                    //on fait une liste pour y ranger les projets
                     projetsTrouvesProj.Add(Catalogue_projets[i]);
                     Console.WriteLine("Projet ajouté !"); //test de fonctionnement, à supprimer
                 }
                 i++;
-                //retourner quelque chose si jamais il trouve pas
-                //ou alors ne proposer que des matières pour lesquelles on trouve un projet en fait, c'est plus intelligent mdr
             }
             return projetsTrouvesProj;
         }
 
-
         public List<Projet> CritLivrable(object critlivr)
         //implémentation de l'interface pour trouver un type de livrable
         {
-            List<Projet> Catalogue_projets = this.Deserialiser();//Désérialisation de notre fichier xml contenant les projets
-            XmlReader reader = XmlReader.Create("Catalogue_projets.xml"); //déclaration du xmlReader
+            List<Projet> Catalogue_projets = this.Deserialiser();
+            XmlReader reader = XmlReader.Create("Catalogue_projets.xml");
 
             string livrable = critlivr as string;
             int i = 0; //compteur
             List<Projet> projetsTrouvesLivr = new List<Projet>(); //liste qui contiendra nos résultats
 
             //Recherche du ou des projets concerné(s) par le critère
-            while (i < 3) //tant qu'on a pas regardé tous les projets, ça serait bien de rajouter une variable NbProjets (nombre de projets dans notre fichier xml)
+            while (i < 3)
             {
                 reader.ReadToFollowing("Nature"); //On passe à la balise "Nature" suivante ou on inspecte le projet suivant
                 //reader.ReadToFollowing("Livrables");
 
-                string mot = reader.ReadElementContentAsString();//on dit que la valeur dans la balise Nature est un string
-                Console.WriteLine(i);
-                Console.WriteLine(mot);
-
+                string mot = reader.ReadElementContentAsString();
                 //pour chaque projet, on regarde si dans la liste des livrables, livrable == mot
                 if (mot == livrable)
                 {
                     //si oui, on récupère le projet et on range tous ses attributs dans un objet de la classe Projet
                     //on fait une liste pour y ranger les projets
-                    //projetsTrouvesLivr.Add(Catalogue_projets[i]);
-                    
+                    projetsTrouvesLivr.Add(Catalogue_projets[i]);
                     Console.WriteLine("Projet ajouté !"); //test de fonctionnement, à supprimer
                 }
                 i++;
@@ -145,67 +148,57 @@ namespace Catalogue
         public List<Projet> CritMatiere(object critmat)
         //implémentation de l'interface pour trouver une matière
         {
-            List<Projet> Catalogue_projets = this.Deserialiser();//Désérialisation de notre fichier xml contenant les projets
-            XmlReader reader = XmlReader.Create("Catalogue_projets.xml"); //déclaration du xmlReader
+            List<Projet> Catalogue_projets = this.Deserialiser();
+            XmlReader reader = XmlReader.Create("Catalogue_projets.xml");
 
             string matiere = critmat as string;
             int i = 0; //compteur 
             List<Projet> projetsTrouvesMat = new List<Projet>(); //liste qui contiendra nos résultats
             
             //Recherche du ou des projets concerné(s) par le critère
-            while (i<3) //tant qu'on a pas regardé tous les projets, ça serait bien de rajouter une variable NbProjets (nombre de projets dans notre fichier xml)
+            while (i<3)
             {
-                reader.ReadToFollowing("MatiereProjet"); //On passe à la balise "matiere" suivante, càd on inspecte le projet suivant
-                string mot = reader.ReadElementContentAsString();//on dit que la valeur dans la balise MatiereProjet est un string
+                reader.ReadToFollowing("NomMat"); //On passe à la balise "matiere" suivante, càd on inspecte le projet suivant
+                string mot = reader.ReadElementContentAsString();
 
                 //pour chaque projet, on regarde si dans la liste des matières, matiere == mot
                 if (mot == matiere)
                 {
                     //si oui, on récupère le projet et on range tous ses attributs dans un objet de la classe Projet
-                    //on fait une liste pour y ranger les projets
                     projetsTrouvesMat.Add(Catalogue_projets[i]);
                     Console.WriteLine("Projet ajouté !"); //test de fonctionnement, à supprimer
                 }
                 i++;
-                //retourner quelque chose si jamais il trouve pas
-                //ou alors ne proposer que des matières pour lesquelles on trouve un projet en fait, c'est plus intelligent mdr
             }
             return projetsTrouvesMat;
-
-            //SI ON RETOURNE UNE LISTE VIDE, PETIT MESSAGE D'ERREUR
         }
 
         public List<Projet> CritAnnee(object critannee)
         //implémentation de l'interface pour trouver une annee
         {
-            List<Projet> Catalogue_projets = this.Deserialiser();//Désérialisation de notre fichier xml contenant les projets
-            XmlReader reader = XmlReader.Create("Catalogue_projets.xml"); //déclaration du xmlReader
+            List<Projet> Catalogue_projets = this.Deserialiser();
+            XmlReader reader = XmlReader.Create("Catalogue_projets.xml");
 
             string annee = critannee as string;
             int i = 0; //compteur 
             List<Projet> projetsTrouvesAnnee = new List<Projet>(); //liste qui contiendra nos résultats
 
             //Recherche du ou des projets concerné(s) par le critère
-            while (i < 3) //tant qu'on a pas regardé tous les projets, ça serait bien de rajouter une variable NbProjets (nombre de projets dans notre fichier xml)
+            while (i < 3)
             {
                 reader.ReadToFollowing("AnneeProjet"); //On passe à la balise "AnneeProjet" suivante, càd on inspecte le projet suivant
-                string mot = reader.ReadElementContentAsString();//on dit que la valeur dans la balise AnneeProjet est un string
+                string mot = reader.ReadElementContentAsString();
 
                 //pour chaque projet, on regarde si dans la liste des années, annee == mot
                 if (mot == annee)
                 {
                     //si oui, on récupère le projet et on range tous ses attributs dans un objet de la classe Projet
-                    //on fait une liste pour y ranger les projets
                     projetsTrouvesAnnee.Add(Catalogue_projets[i]);
                     Console.WriteLine("Projet ajouté !"); //test de fonctionnement, à supprimer
                 }
                 i++;
-                //retourner quelque chose si jamais il trouve pas
-                //ou alors ne proposer que des matières pour lesquelles on trouve un projet en fait, c'est plus intelligent mdr
             }
             return projetsTrouvesAnnee;
-
-            //SI ON RETOURNE UNE LISTE VIDE, PETIT MESSAGE D'ERREUR
         }
 
 

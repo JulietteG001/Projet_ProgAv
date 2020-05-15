@@ -13,7 +13,7 @@ namespace Catalogue
         {
             Console.WriteLine("Entrez le numéro correspondant à votre critère de recherche : \n" +
                 "1. Par projet\n" + //OK INTERFACE
-                "2. Par matière\n" +
+                "2. Par matière\n" + //OK INTERFACE
                 "3. Par intervenant\n" + 
                 "4. Par type de livrable\n" +
                 "5. Par année\n"); //OK INTERFACE
@@ -51,7 +51,7 @@ namespace Catalogue
 
                 //Affichage de tous les noms de projets
                 Console.WriteLine("=========== Recherche par projet ===========\n");
-                Console.WriteLine("Entrez du projet recherché pour obtenir plus de détails : \n");
+                Console.WriteLine("Entrez le nom du projet recherché pour obtenir plus de détails : \n");
                 int i = 1;
                 foreach (string element in listeAffichage)
                 {
@@ -61,6 +61,8 @@ namespace Catalogue
                 int num2 = int.Parse(Console.ReadLine()); //l'utilisateur choisit le projet dont il veut plus de détails
                 Console.WriteLine(listeAffichage[num2 - 1]); //pour les tests, je laisse le return en commentaire
                 //return listeAffichage[num2 - 1]; //Retourne donc un string -> les méthodes Crit prennent donc un string en entrée ?
+
+            // PREVOIR DES MESSAGES D'ERRREUR SI ON ENTRE PAS LE BON TRUC 
             }
             if (num == 2)
             {
@@ -101,12 +103,7 @@ namespace Catalogue
         }
         public interface ITrouvable
         {
-            //l'interface se charge de regarder si, pour un des critères de recherche, 
-            //il y a dans les projets créés un critère qui correspond. 
-            //si c'est le cas, pour chaque projet, il faut que ce projet soit ciblé et
-            //retenu pour être envoyé à la méthode AfficherResultat
-
-            //déclaration de la classe de base
+            //déclaration des méthodes de base
             Projet CritLivrable(Object critlivr);
             Projet CritMatiere(Object critmat);
             Projet CritInterv(Object critinterv);
