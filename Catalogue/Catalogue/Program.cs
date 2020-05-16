@@ -11,7 +11,7 @@ namespace Catalogue
         static void Main(string[] args)
         {
             Consultation consultation = new Consultation();
-            //consultation.AffinerLaRecherche();
+            consultation.AffinerLaRecherche();
 
             Projet p = new Projet();
             List<Projet> ps = new List<Projet>();
@@ -19,18 +19,20 @@ namespace Catalogue
             //ps = p.CritIntervenant("Favier");
             //ps = p.CritMatiere("Introduction à la programmation");
             //ps = p.CritAnnee("2019-2020");
-            ps = p.CritLivrable("Code source");
-            consultation.AfficherResultat(ps);
+            //ps = p.CritLivrable("Code source");
+            //consultation.AfficherResultat(ps);
 
             //ps = p.CritProjet("Projet Blackout");
             //ps = p.CritLivrable("Rapport");
 
-            //foreach (Projet s in ps) //Pour vérifier ce que contient la liste renvoyée pendant les tests
-            //{
-            //        Console.WriteLine(s);
-            //}
+            foreach (Projet s in ps) //Pour vérifier ce que contient la liste renvoyée pendant les tests
+            {
+                Console.WriteLine(s);
+            }
 
-            //AFFICHAGE DES LIVRABLES
+            //Console.WriteLine(p.CompteNoeuds("Projet"));
+
+            //AFFICHAGE DES INTERVENANTS
 
             //foreach (Projet s in ps) //Pour vérifier ce que contient la liste renvoyée pendant les tests
             //{

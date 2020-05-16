@@ -150,7 +150,7 @@ namespace Catalogue
             List<Projet> projetsTrouvesLivr = new List<Projet>(); //liste qui contiendra nos résultats
 
             //Recherche du ou des projets concerné(s) par le critère
-            while (i < CompteProjets())
+            while (i < CompteNoeuds("Nature"))
             {
                 reader.ReadToFollowing("Nature"); //On passe à la balise "Nature" suivante ou on inspecte le projet suivant
                 //reader.ReadToFollowing("Livrables");

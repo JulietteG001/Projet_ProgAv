@@ -11,6 +11,7 @@ namespace Catalogue
     {
         public void AffinerLaRecherche()
         {
+            Console.Clear();
             Console.WriteLine("Entrez le numéro correspondant à votre critère de recherche : \n" +
                 "1. Par projet\n" + //OK INTERFACE
                 "2. Par matière\n" + //OK INTERFACE
@@ -23,12 +24,14 @@ namespace Catalogue
             XmlReader reader = XmlReader.Create("Catalogue_projets.xml"); //déclaration du XmlReader
             List<string> listeAffichage = new List<string>();
 
+            Projet p = new Projet(); //Pour pouvoir utiliser CompteNoeuds(), à voir si on laisse comme ça
+
             if (num == 1) //Si la recherche se fait par projet
             {
                 int j = 0;
 
                 //Recherche de tous les noms de projets possibles
-                while (j < 3) //PB ici on peut pas utiliser CompteProjets(), ou alors cette méthode prend en entrée CompteProjets()
+                while (j < p.CompteNoeuds("Projet")) 
                 {
                     bool dejaAffiche = false;
                     reader.ReadToFollowing("NomProjet"); 
@@ -58,8 +61,13 @@ namespace Catalogue
                     Console.WriteLine(i + ". " + element);
                     i++;
                 }
+                Console.WriteLine("\n" + i + ". Retour à l'écran d'accueil");
                 int num2 = int.Parse(Console.ReadLine()); //l'utilisateur choisit le projet dont il veut plus de détails
-                Console.WriteLine(listeAffichage[num2 - 1]); //pour les tests, je laisse le return en commentaire
+                if (num2 == i)
+                {
+                    AffinerLaRecherche();
+                }
+                else Console.WriteLine(listeAffichage[num2 - 1]); //pour les tests, je laisse le return en commentaire
                 //return listeAffichage[num2 - 1]; //Retourne donc un string -> les méthodes Crit prennent donc un string en entrée ?
 
             // PREVOIR DES MESSAGES D'ERRREUR SI ON ENTRE PAS LE BON TRUC 
@@ -73,7 +81,7 @@ namespace Catalogue
                 int j = 0;
 
                 //Recherche de toutes les matières possibles
-                while (j < 3) //PB ici on peut pas utiliser CompteProjets(), ou alors cette méthode prend en entrée CompteProjets()
+                while (j < p.CompteNoeuds("NomMat")) 
                 {
                     bool dejaAffiche = false;
                     reader.ReadToFollowing("NomMat");
@@ -102,8 +110,13 @@ namespace Catalogue
                     Console.WriteLine(i + ". " + element);
                     i++;
                 }
+                Console.WriteLine("\n" + i + ". Retour à l'écran d'accueil");
                 int num2 = int.Parse(Console.ReadLine()); //l'utilisateur choisit le projet dont il veut plus de détails
-                Console.WriteLine(listeAffichage[num2 - 1]); //pour les tests, je laisse le return en commentaire
+                if (num2 == i)
+                {
+                    AffinerLaRecherche();
+                }
+                else Console.WriteLine(listeAffichage[num2 - 1]); //pour les tests, je laisse le return en commentaire
                 //return listeAffichage[num2 - 1];
             }
 
@@ -112,6 +125,49 @@ namespace Catalogue
                 //afficher l'ensemble des intervenants pour lesquels on a des projets (+ 1 ou on en a pas pour les messages d'erreur)
                 //l'utilisateur devra à nouveau taper un chiffre pour sélectionner l'intervenant
                 //C'est l'interface qui prend le reste en main avec une méthode pour sortir les projets par intervenant
+                int j = 0;
+
+                //Recherche de toutes les années possibles
+                while (j < p.CompteNoeuds("NomInterv")) 
+                {
+                    bool dejaAffiche = false;
+                    reader.ReadToFollowing("NomInterv");
+                    string nom = reader.ReadElementContentAsString();
+                    reader.ReadToFollowing("Prenom");
+                    string prenom = reader.ReadElementContentAsString();
+
+                    foreach (string element in listeAffichage)
+                    //on vérifie si l'intervenant rencontré n'a pas déjà été ajouté à la liste d'affichage
+                    {
+                        if (element == nom)
+                        {
+                            dejaAffiche = true; //l'intervenant a déjà été entré dans la liste de choses à afficher 
+                        }
+                    }
+                    if (!dejaAffiche) //si l'intervenant n'a jamais été rencontré
+                    {
+                        listeAffichage.Add(prenom); //on l'ajoute dans la liste des choses à afficher
+                        listeAffichage.Add(nom);
+                    }
+                    j++;
+                }
+                //Affichage de tous les intervenants
+                Console.WriteLine("=========== Recherche par intervenants ===========\n");
+                Console.WriteLine("Entrez le numéro de l'intervenant recherché pour obtenir les projets associés : \n");
+                int i = 1;
+                for (int k=0 ; k < listeAffichage.Count ; k+=2)
+                {
+                    Console.WriteLine(i + ". " + listeAffichage[k] + " " + listeAffichage[k+1]); //affichage du prénom et du nom
+                    i++;
+                }
+                Console.WriteLine("\n" + i + ". Retour à l'écran d'accueil");
+                int num2 = int.Parse(Console.ReadLine()); //l'utilisateur choisit le projet dont il veut plus de détails
+                if (num2 == i)
+                {
+                    AffinerLaRecherche();
+                }
+                else Console.WriteLine(listeAffichage[num2 - 1]); //pour les tests, je laisse le return en commentaire
+                //return listeAffichage[num2 - 1];
             }
 
             if (num == 4)
@@ -119,7 +175,46 @@ namespace Catalogue
                 //afficher l'ensemble des livrables pour lesquels on a des projets (+ 1 ou on en a pas pour les messages d'erreur)
                 //l'utilisateur devra à nouveau taper un chiffre pour sélectionner le livrable
                 //C'est l'interface qui prend le reste en main avec une méthode pour sortir les projets par livrable
+                int j = 0;
 
+                //Recherche de toutes les années possibles
+                while (j < p.CompteNoeuds("Nature")) 
+                {
+                    bool dejaAffiche = false;
+                    reader.ReadToFollowing("Nature");
+                    string livrable = reader.ReadElementContentAsString();
+                    foreach (string element in listeAffichage)
+                    //on vérifie si le livrable rencontré n'a pas déjà été ajouté à la liste d'affichage
+                    {
+                        if (element == livrable)
+                        {
+                            dejaAffiche = true; //le livrable a déjà été entré dans la liste de choses à afficher 
+                        }
+                    }
+                    if (!dejaAffiche) //si le livrable n'a jamais été rencontré
+                    {
+                        listeAffichage.Add(livrable); //on l'ajoute dans la liste des choses à afficher
+                    }
+                    j++;
+                }
+
+                //Affichage de toutes les années
+                Console.WriteLine("=========== Recherche par type de livrable ===========\n");
+                Console.WriteLine("Entrez le numéro de du type de livrable recherché pour obtenir les projets associés : \n");
+                int i = 1;
+                foreach (string element in listeAffichage)
+                {
+                    Console.WriteLine(i + ". " + element);
+                    i++;
+                }
+                Console.WriteLine("\n" + i + ". Retour à l'écran d'accueil");
+                int num2 = int.Parse(Console.ReadLine()); //l'utilisateur choisit le projet dont il veut plus de détails
+                if (num2 == i)
+                {
+                    AffinerLaRecherche();
+                }
+                else Console.WriteLine(listeAffichage[num2 - 1]); //pour les tests, je laisse le return en commentaire
+                //return listeAffichage[num2 - 1];
             }
 
             if (num == 5)
@@ -127,7 +222,7 @@ namespace Catalogue
                 int j = 0;
 
                 //Recherche de toutes les années possibles
-                while (j < 3) 
+                while (j < p.CompteNoeuds("AnneeProjet")) 
                 {
                     bool dejaAffiche = false;
                     reader.ReadToFollowing("AnneeProjet");
@@ -156,8 +251,13 @@ namespace Catalogue
                     Console.WriteLine(i + ". " + element);
                     i++;
                 }
+                Console.WriteLine("\n" + i + ". Retour à l'écran d'accueil");
                 int num2 = int.Parse(Console.ReadLine()); //l'utilisateur choisit le projet dont il veut plus de détails
-                Console.WriteLine(listeAffichage[num2 - 1]); //pour les tests, je laisse le return en commentaire
+                if (num2 == i)
+                {
+                    AffinerLaRecherche();
+                }
+                else Console.WriteLine(listeAffichage[num2 - 1]); //pour les tests, je laisse le return en commentaire
                 //return listeAffichage[num2 - 1];
             }
         }
