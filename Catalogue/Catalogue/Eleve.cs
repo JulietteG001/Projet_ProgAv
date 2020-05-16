@@ -6,12 +6,20 @@ using System.Threading.Tasks;
 
 namespace Catalogue
 {
-    class Eleve : Intervenant
+    public class Eleve : Intervenant
     {
         public string Promotion { get; set; }
         public string Annee { get; set; }
 
+        public Eleve() : base()
+        //Constructeur par défaut
+        {
+            Promotion = "";
+            Annee = "";
+        }
+
         public Eleve(string _promotion, string _annee) : base()
+        //constructeur surchargé
         {
             Promotion = _promotion;
             Annee = _annee;

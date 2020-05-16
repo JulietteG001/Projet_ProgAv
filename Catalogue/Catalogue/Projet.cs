@@ -14,8 +14,8 @@ namespace Catalogue
         public string NomProjet { get; set; } //Nom du projet
         public int NbEleves { get; set; } //Nombre d'élèves impliqués dans le projet
         public int Duree { get; set; } //Durée du projet en jours
-        public string AnneeProjet { get; set; } //Année où s'est déroulé le projet (de la forme 20XX-20XX)
-        public string Semestres { get; set; } //Numéro des semestres où s'est déroulé le projet
+        public string AnneeProjet { get; set; } //Année où s'est déroulé le projet (20XX-20XX)
+        public string Semestres { get; set; } //Semestres où s'est déroulé le projet
         public string Consigne { get; set; } //Consigne brève de ce que demande le projet
         public List<Livrable> Livrables { get; set; } //Liste des livrables à fournir à terme du projet
         public Matiere MatiereProjet { get; set; } //Matière concernée par le projet
@@ -71,6 +71,31 @@ namespace Catalogue
             return nbProjets;
         }
 
+        public int CompteNoeuds(string nomNoeud)
+        //compte le nb de noeuds du même nom contenus dans le dossier XML
+        //permet de faciliter la recherche selon critères
+        {
+            //je veux parcourir tous les noeuds du fichier XML 
+            //dès que mon reader tombe sur un noeud, il le considère comme un string
+            //si le string du noeud correspond au string entré en paramètre, on augmente le compteur
+            //quand tout est parcouru, on renvoie le nombre de noeuds
+            //cela servira à parcourir tous les noeuds d'un critère de recherche
+
+            int nbNoeuds = 0;
+
+            XmlDocument docRef = new XmlDocument(); //on crée un objet XmlDocument
+            docRef.Load("Catalogue_projets.xml"); //on lui attribue notre document XML
+
+            XmlElement nomCherche = docRef.DocumentElement; //L'élément nomCherche fait partie de Catalogue_projet.xml
+            XmlNodeList noeud = nomCherche.GetElementsByTagName(nomNoeud); //On compte les noeuds dont le nom correspond à celui du noeud pris en entrée
+            nbNoeuds = noeud.Count;
+            return nbNoeuds;
+
+            //dans la méthode de recherche, mettons, par livrable
+            //il faut donner le nombre de noeuds de type "Nature"
+            //puis ensuite faire tourner la fonction comme d'hab sur tous ces noeuds pour identifier ce qu'on cherche
+        }
+
         public List<Projet> Deserialiser()
         //Désérialise le contenu du fichier XML contenant les projets
         {
@@ -108,7 +133,6 @@ namespace Catalogue
                 {
                     //si oui, on récupère le projet et on range tous ses attributs dans un objet de la classe Projet
                     projetsTrouvesProj.Add(Catalogue_projets[i]);
-                    Console.WriteLine("Projet ajouté !"); //test de fonctionnement, à supprimer
                 }
                 i++;
             }
@@ -136,7 +160,6 @@ namespace Catalogue
                 if (mot == livrable)
                 {
                     //si oui, on récupère le projet et on range tous ses attributs dans un objet de la classe Projet
-                    //on fait une liste pour y ranger les projets
                     projetsTrouvesLivr.Add(Catalogue_projets[i]);
                     Console.WriteLine("Projet ajouté !"); //test de fonctionnement, à supprimer
                 }
@@ -166,7 +189,6 @@ namespace Catalogue
                 {
                     //si oui, on récupère le projet et on range tous ses attributs dans un objet de la classe Projet
                     projetsTrouvesMat.Add(Catalogue_projets[i]);
-                    Console.WriteLine("Projet ajouté !"); //test de fonctionnement, à supprimer
                 }
                 i++;
             }
@@ -194,7 +216,6 @@ namespace Catalogue
                 {
                     //si oui, on récupère le projet et on range tous ses attributs dans un objet de la classe Projet
                     projetsTrouvesAnnee.Add(Catalogue_projets[i]);
-                    Console.WriteLine("Projet ajouté !"); //test de fonctionnement, à supprimer
                 }
                 i++;
             }
@@ -212,17 +233,16 @@ namespace Catalogue
             List<Projet> projetsTrouvesInterv = new List<Projet>(); //liste qui contiendra nos résultats
 
             //Recherche du ou des projets concerné(s) par le critère
-            while (i < 1)
+            while (i < CompteProjets())
             {
-                reader.ReadToFollowing("NomInterv"); //On passe à la balise "Nature" suivante ou on inspecte le projet suivant
+                reader.ReadToFollowing("NomInterv"); //On passe à la balise "NomInterv" suivante ou on inspecte le projet suivant
                 //reader.ReadToFollowing("Intervenant");
 
                 string mot = reader.ReadElementContentAsString();
-                //pour chaque projet, on regarde si dans la liste des livrables, livrable == mot
+                //pour chaque projet, on regarde si dans la liste des intervenants, intervenant == mot
                 if (mot == intervenant)
                 {
                     //si oui, on récupère le projet et on range tous ses attributs dans un objet de la classe Projet
-                    //on fait une liste pour y ranger les projets
                     projetsTrouvesInterv.Add(Catalogue_projets[i]);
                     //Console.WriteLine(Catalogue_projets[i].Intervenants[0]);
                     Console.WriteLine("Projet ajouté !"); //test de fonctionnement, à supprimer
