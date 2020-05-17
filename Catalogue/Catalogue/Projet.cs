@@ -19,6 +19,10 @@ namespace Catalogue
         public string Consigne { get; set; } //Consigne brève de ce que demande le projet
         public List<Livrable> Livrables { get; set; } //Liste des livrables à fournir au terme du projet
         public Matiere MatiereProjet { get; set; } //Matière concernée par le projet
+
+        [XmlArrayItem("Enseignant", typeof(Enseignant))] //Ce code signifie que le Serializer peut rencontrer ces types 
+        [XmlArrayItem("Eleve", typeof(Eleve))]           //dérivés, qui font quand même partie de la classe Intervenant
+        [XmlArrayItem("Intervenant_externe", typeof(Intervenant_externe))]
         public List<Intervenant> Intervenants { get; set; }  //Liste des intervenants au sein du projet (profs, externes, élèves)
 
         public Projet() //Constructeur par défaut

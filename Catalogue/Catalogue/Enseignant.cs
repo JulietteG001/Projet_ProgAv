@@ -24,7 +24,7 @@ namespace Catalogue
 
         public override string ToString()
         {
-            string chRes = base.ToString() + "Matière(s) enseignée(s) : " + Matieres;
+            string chRes = base.ToString() + "\n       Matière(s) enseignée(s) : " + Matieres;
             return chRes;
         }
     }

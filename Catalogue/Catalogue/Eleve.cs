@@ -27,7 +27,7 @@ namespace Catalogue
 
         public override string ToString()
         {
-            string chRes = base.ToString() + "Promotion : " + Promotion + " Année : " + Annee;
+            string chRes = base.ToString() + "\n       Promotion : " + Promotion + "\n       Année : " + Annee;
             return chRes;
         }
     }

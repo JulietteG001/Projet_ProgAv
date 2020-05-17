@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Catalogue
 {
@@ -10,6 +11,9 @@ namespace Catalogue
     {
         public string NomMat { get; set; }
         public string Coefficient { get; set; }
+
+        [XmlArrayItem("Enseignant", typeof(Enseignant))] //Ce code signifie que le Serializer peut rencontrer ces types 
+        [XmlArrayItem("Eleve", typeof(Eleve))]           //dérivés, qui font quand même partie de la classe Intervenant
         private List<Intervenant> Encadrants { get; set; } 
 
         public Matiere() //Constructeur par défaut
@@ -26,7 +30,11 @@ namespace Catalogue
         }
         public override string ToString()
         {
-            string chRes = "\n       Nom : " + NomMat + "\n       Coefficient : " + Coefficient + "\n       Encadrants : " + Encadrants;
+            string chRes = "\n       Nom : " + NomMat + "\n       Coefficient : " + Coefficient + "\n       Encadrants : ";
+            //foreach (Intervenant e in this.Encadrants) //On ajoute la liste des encadrants à la chaîne
+            //{
+            //    chRes += e.Prenom + " " + e.NomInterv + " | ";
+            //}
             return chRes;
         }
     }
