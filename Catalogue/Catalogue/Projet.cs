@@ -17,7 +17,7 @@ namespace Catalogue
         public string AnneeProjet { get; set; } //Année où s'est déroulé le projet (20XX-20XX)
         public string Semestres { get; set; } //Semestres où s'est déroulé le projet
         public string Consigne { get; set; } //Consigne brève de ce que demande le projet
-        public List<Livrable> Livrables { get; set; } //Liste des livrables à fournir à terme du projet
+        public List<Livrable> Livrables { get; set; } //Liste des livrables à fournir au terme du projet
         public Matiere MatiereProjet { get; set; } //Matière concernée par le projet
         public List<Intervenant> Intervenants { get; set; }  //Liste des intervenants au sein du projet (profs, externes, élèves)
 
@@ -75,13 +75,7 @@ namespace Catalogue
         //compte le nb de noeuds du même nom contenus dans le dossier XML
         //permet de faciliter la recherche selon critères
         {
-            //je veux parcourir tous les noeuds du fichier XML 
-            //dès que mon reader tombe sur un noeud, il le considère comme un string
-            //si le string du noeud correspond au string entré en paramètre, on augmente le compteur
-            //quand tout est parcouru, on renvoie le nombre de noeuds
-            //cela servira à parcourir tous les noeuds d'un critère de recherche
-
-            int nbNoeuds = 0;
+            int nbNoeuds = 0; //stocke le nombre de noeuds trouvés
 
             XmlDocument docRef = new XmlDocument(); //on crée un objet XmlDocument
             docRef.Load("Catalogue_projets.xml"); //on lui attribue notre document XML
@@ -147,24 +141,29 @@ namespace Catalogue
 
             string livrable = critlivr as string;
             int i = 0; //compteur
+            //int j = 0; //compteur
             List<Projet> projetsTrouvesLivr = new List<Projet>(); //liste qui contiendra nos résultats
 
             //Recherche du ou des projets concerné(s) par le critère
-            while (i < CompteNoeuds("Nature"))
-            {
-                reader.ReadToFollowing("Nature"); //On passe à la balise "Nature" suivante ou on inspecte le projet suivant
-                //reader.ReadToFollowing("Livrables");
-
-                string mot = reader.ReadElementContentAsString();
-                //pour chaque projet, on regarde si dans la liste des livrables, livrable == mot
-                if (mot == livrable)
+            //while (j < CompteProjets()) //on regarde pour chaque projet
+            //{
+                while (i < CompteNoeuds("Nature"))
                 {
-                    //si oui, on récupère le projet et on range tous ses attributs dans un objet de la classe Projet
-                    projetsTrouvesLivr.Add(Catalogue_projets[i]);
-                    Console.WriteLine("Projet ajouté !"); //test de fonctionnement, à supprimer
+                    reader.ReadToFollowing("Nature"); //On passe à la balise "Nature" suivante ou on inspecte le projet suivant
+
+                    string mot = reader.ReadElementContentAsString();
+                    //pour chaque projet, on regarde si dans la liste des livrables, livrable == mot
+                    if (mot == livrable)
+                    {
+                        //si oui, on récupère le projet et on range tous ses attributs dans un objet de la classe Projet
+                        projetsTrouvesLivr.Add(Catalogue_projets[i]); //quand on a décommenté la boucle, remplacer par j ?
+                        Console.WriteLine("Projet ajouté !"); //test de fonctionnement, à supprimer
+                    }
+                    i++;
                 }
-                i++;
-            }
+                //reader.ReadToFollowing("NomProjet");
+                //j++;
+            //}
             return projetsTrouvesLivr;
         }
 
