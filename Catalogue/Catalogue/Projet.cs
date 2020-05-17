@@ -9,7 +9,7 @@ using System.IO; //Pour utiliser StreamReader
 
 namespace Catalogue
 {
-    public class Projet //: Consultation.ITrouvable //erreur ici normale tant qu'on a pas déclaré toutes les méthodes crées dans l'interface
+    public class Projet : Consultation.ITrouvable //erreur ici normale tant qu'on a pas déclaré toutes les méthodes crées dans l'interface
     {
         public string NomProjet { get; set; } //Nom du projet
         public int NbEleves { get; set; } //Nombre d'élèves impliqués dans le projet
@@ -147,7 +147,7 @@ namespace Catalogue
             //Recherche du ou des projets concerné(s) par le critère
             //while (j < CompteProjets()) //on regarde pour chaque projet
             //{
-                while (i < CompteNoeuds("Nature"))
+                while (i < 2)//while (i < CompteNoeuds("Nature"))
                 {
                     reader.ReadToFollowing("Nature"); //On passe à la balise "Nature" suivante ou on inspecte le projet suivant
 

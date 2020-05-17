@@ -204,27 +204,27 @@ namespace Catalogue
                 Console.WriteLine("\n" + i + ". Retour à l'écran d'accueil");
                 int num2 = int.Parse(Console.ReadLine()); //l'utilisateur choisit l'intervenant
 
-                //while (num2 < 1 || num2 > listeAffichage.Count - 2)
-                //{
-                //    Console.Clear();
-                //    Console.WriteLine("Veuillez entrer une valeur correspondant à un intervenant !");
-                //    Console.WriteLine("=========== Recherche par intervenant ===========\n");
-                //    Console.WriteLine("Entrez le numéro de l'intervenant recherché pour obtenir les projets associés : \n");
-                //    i = 1;
-                //    for (int k = 0; k < listeAffichage.Count; k += 2)
-                //    {
-                //        Console.WriteLine(i + ". " + listeAffichage[k] + " " + listeAffichage[k + 1]); //affichage du prénom et du nom
-                //        i++;
-                //    }
-                //    Console.WriteLine("\n" + i + ". Retour à l'écran d'accueil");
-                //    num2 = int.Parse(Console.ReadLine()); //l'utilisateur choisit l'intervenant
-                //}
+                while (num2 < 1 || num2 > listeAffichage.Count +2)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Veuillez entrer une valeur correspondant à un intervenant !");
+                    Console.WriteLine("=========== Recherche par intervenant ===========\n");
+                    Console.WriteLine("Entrez le numéro de l'intervenant recherché pour obtenir les projets associés : \n");
+                    i = 1;
+                    for (int k = 0; k < listeAffichage.Count; k += 2)
+                    {
+                        Console.WriteLine(i + ". " + listeAffichage[k] + " " + listeAffichage[k + 1]); //affichage du prénom et du nom
+                        i++;
+                    }
+                    Console.WriteLine("\n" + i + ". Retour à l'écran d'accueil");
+                    num2 = int.Parse(Console.ReadLine()); //l'utilisateur choisit l'intervenant
+                }
 
                 if (num2 == i)
                 {
                     AffinerLaRecherche();
                 }
-                else Console.WriteLine(listeAffichage[num2 - 1]); //pour les tests, je laisse le return en commentaire
+                else Console.WriteLine(listeAffichage[num2*2 - 1]); //pour les tests, je laisse le return en commentaire
                 //return listeAffichage[num2 - 1];
             }
 
@@ -265,7 +265,7 @@ namespace Catalogue
                 Console.WriteLine("\n" + i + ". Retour à l'écran d'accueil");
                 int num2 = int.Parse(Console.ReadLine()); //l'utilisateur choisit le livrable
 
-                while (num2 < 1 || num2 > listeAffichage.Count)
+                while (num2 < 1 || num2 > listeAffichage.Count + 1)
                 {
                     Console.Clear();
                     Console.WriteLine("Veuillez entrer une valeur correspondant à un livrable !");
@@ -362,10 +362,11 @@ namespace Catalogue
         public interface ITrouvable
         {
             //déclaration des méthodes de base
-            Projet CritLivrable(Object critlivr);
-            Projet CritMatiere(Object critmat);
-            Projet CritInterv(Object critinterv);
-            Projet CritAnnee(Object critannee);
+            List<Projet> CritProjet(Object critProj);
+            List<Projet> CritLivrable(Object critlivr);
+            List<Projet> CritMatiere(Object critmat);
+            //List<Projet> CritInterv(Object critinterv);
+            List<Projet> CritAnnee(Object critannee);
         }
     }
 }

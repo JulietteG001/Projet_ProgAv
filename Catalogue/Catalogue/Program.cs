@@ -10,16 +10,16 @@ namespace Catalogue
     {
         static void Main(string[] args)
         {
-            //Consultation consultation = new Consultation();
+            Consultation consultation = new Consultation();
             //consultation.AffinerLaRecherche();
 
             Projet p = new Projet();
             List<Projet> ps = new List<Projet>();
 
-            //ps = p.CritIntervenant("Favier");
+            ps = p.CritIntervenant("Favier");
             //ps = p.CritMatiere("Introduction à la programmation");
             //ps = p.CritAnnee("2019-2020");
-            ps = p.CritLivrable("Etat de l'art");
+            //ps = p.CritLivrable("Etat de l'art");
             //consultation.AfficherResultat(ps);
 
             //ps = p.CritProjet("Projet Blackout");
