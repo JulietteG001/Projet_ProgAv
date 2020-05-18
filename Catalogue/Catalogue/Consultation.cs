@@ -10,8 +10,9 @@ namespace Catalogue
     class Consultation
     {
         public void AffinerLaRecherche()
+        //permet à l'utilisateur de chercher un projet selon différents critères
         {
-            Console.Clear();
+            Console.Clear(); //permet de vider l'interface
             Console.WriteLine("Entrez le numéro correspondant à votre critère de recherche : \n" +
                 "1. Par projet\n" +
                 "2. Par matière\n" +
@@ -20,7 +21,7 @@ namespace Catalogue
                 "5. Par année\n");
             int num = int.Parse(Console.ReadLine());
 
-            while(num<1 || num>5) //j'ai mis 5 parce que je vois pas comment compter le nb de critères
+            while(num<1 || num>5) //Car 5 critères de recherche possibles
             //tant que l'utilisateur n'entre pas une valeur correcte, on réitère la demande
             {
                 Console.Clear();
@@ -51,8 +52,8 @@ namespace Catalogue
                     reader.ReadToFollowing("NomProjet"); 
                     string nom = reader.ReadElementContentAsString();
                     foreach(string element in listeAffichage) 
-                        //on vérifie si le nom rencontré n'a pas déjà été rencontré
-                        //j'ai donc fait l'hypothèse que 2 projets peuvent avoir le même nom, c'est peut-être débile x)
+                    //on vérifie si le nom rencontré n'a pas déjà été rencontré
+                    //Hypothèse : 2 projets peuvent avoir le même nom
                     {
                         if(element == nom)
                         {
@@ -99,8 +100,7 @@ namespace Catalogue
                 {
                     AffinerLaRecherche();
                 }
-                else Console.WriteLine(listeAffichage[num2 - 1]); //pour les tests, je laisse le return en commentaire
-                //return listeAffichage[num2 - 1]; //Retourne donc un string -> les méthodes Crit prennent donc un string en entrée ?
+                else Console.WriteLine(listeAffichage[num2 - 1]);
             }
 
             if (num == 2) //Recherche par matière
@@ -121,7 +121,7 @@ namespace Catalogue
                             dejaAffiche = true; //la matière a déjà été entrée dans la liste de choses à afficher 
                         }
                     }
-                    if (!dejaAffiche) //si l'année n'a jamais été rencontrée
+                    if (!dejaAffiche) //si la matière n'a jamais été rencontrée
                     {
                         listeAffichage.Add(mat); //on l'ajoute dans la liste des choses à afficher
                     }
@@ -160,8 +160,7 @@ namespace Catalogue
                 {
                     AffinerLaRecherche();
                 }
-                else Console.WriteLine(listeAffichage[num2 - 1]); //pour les tests, je laisse le return en commentaire
-                //return listeAffichage[num2 - 1];
+                else Console.WriteLine(listeAffichage[num2 - 1]);
             }
 
             if (num == 3) //Recherche par intervenant
@@ -217,15 +216,14 @@ namespace Catalogue
                         i++;
                     }
                     Console.WriteLine("\n" + i + ". Retour à l'écran d'accueil");
-                    num2 = int.Parse(Console.ReadLine()); //l'utilisateur choisit l'intervenant
+                    num2 = int.Parse(Console.ReadLine());
                 }
 
                 if (num2 == i)
                 {
                     AffinerLaRecherche();
                 }
-                else Console.WriteLine(listeAffichage[num2*2 - 1]); //pour les tests, je laisse le return en commentaire
-                //return listeAffichage[num2 - 1];
+                else Console.WriteLine(listeAffichage[num2*2 - 1]);
             }
 
             if (num == 4) //Recherche par livrable
@@ -285,8 +283,7 @@ namespace Catalogue
                 {
                     AffinerLaRecherche();
                 }
-                else Console.WriteLine(listeAffichage[num2 - 1]); //pour les tests, je laisse le return en commentaire
-                //return listeAffichage[num2 - 1];
+                else Console.WriteLine(listeAffichage[num2 - 1]);
             }
 
             if (num == 5) //Recherche par année
@@ -346,8 +343,7 @@ namespace Catalogue
                 {
                     AffinerLaRecherche();
                 }
-                else Console.WriteLine(listeAffichage[num2 - 1]); //pour les tests, je laisse le return en commentaire
-                //return listeAffichage[num2 - 1];
+                else Console.WriteLine(listeAffichage[num2 - 1]);
             }
         }
         public void AfficherResultat(List<Projet> projets)

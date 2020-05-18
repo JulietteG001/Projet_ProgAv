@@ -8,11 +8,6 @@ using System.Threading.Tasks;
 
 namespace Catalogue
 {
-    //[System.Xml.Serialization.XmlInclude(typeof(Enseignant))]
-    //[System.Xml.Serialization.XmlInclude(typeof(Eleve))]
-    //[System.Xml.Serialization.XmlInclude(typeof(Intervenant_externe))]
-    //Ce code signifie que le Serializer peut rencontrer ces types dérivés, qui font quand même partie de la classe Intervenant
-    
     public abstract class Intervenant
     //abstraite car un intervenant tout seul n'existe pas en lui-même.
     //on lui applique donc l'étiquette élève, enseignant, ou intervenant extérieur via des classes héritières.

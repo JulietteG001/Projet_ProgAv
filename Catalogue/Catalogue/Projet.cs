@@ -20,9 +20,10 @@ namespace Catalogue
         public List<Livrable> Livrables { get; set; } //Liste des livrables à fournir au terme du projet
         public Matiere MatiereProjet { get; set; } //Matière concernée par le projet
 
-        [XmlArrayItem("Enseignant", typeof(Enseignant))] //Ce code signifie que le Serializer peut rencontrer ces types 
-        [XmlArrayItem("Eleve", typeof(Eleve))]           //dérivés, qui font quand même partie de la classe Intervenant
+        [XmlArrayItem("Enseignant", typeof(Enseignant))] 
+        [XmlArrayItem("Eleve", typeof(Eleve))]           
         [XmlArrayItem("Intervenant_externe", typeof(Intervenant_externe))]
+        //Ce code signifie que le Serializer peut rencontrer ces types dérivés, qui font partie de la classe Intervenant
         public List<Intervenant> Intervenants { get; set; }  //Liste des intervenants au sein du projet (profs, externes, élèves)
 
         public Projet() //Constructeur par défaut
@@ -53,31 +54,22 @@ namespace Catalogue
         }
         public override string ToString()
         {
-            string chRes = "Nom : " + NomProjet + "\nNombre d'élèves: " + NbEleves + "\nDurée (en jours) : " + Duree + "\nAnnée du projet : " + AnneeProjet + "\nSemestres : " + Semestres + "\nConsigne : " + Consigne + "\nLivrables : ";
+            string chRes = "Nom : " + NomProjet + "\nNombre d'élèves: " + NbEleves + "\nDurée (en jours) : " + Duree + "\nAnnée du projet : " + AnneeProjet + "\nSemestres : " + Semestres + "\nConsigne : " + Consigne + "\n\nLivrables : ";
             foreach (Livrable l in this.Livrables) //On ajoute la liste des livrables à la chaîne
             {
                 chRes += l.Nature + " | ";
             }
-            chRes += "\nMatière associée : " + MatiereProjet.ToString() + "\nIntervenants : ";
+            chRes += "\nMatière associée : " + MatiereProjet.ToString() + "\n\nIntervenants : ";
             foreach (Intervenant i in this.Intervenants) //On ajoute la liste des intervenants à la chaîne
             {
                 chRes += i.ToString() + " | ";
             }
+            chRes += "\n _______________________________________________________________ \n";
             return chRes;
-        }
-
-        public int CompteProjets()
-        //compte le nb de projets contenus dans le dossier XML via désérialisation
-        {
-            int nbProjets = 0; 
-            List<Projet> Catalogue_projets = this.Deserialiser();//Désérialisation de notre fichier xml contenant les projets
-            nbProjets = Catalogue_projets.Count;
-            return nbProjets;
         }
 
         public int CompteNoeuds(string nomNoeud)
         //compte le nb de noeuds du même nom contenus dans le dossier XML
-        //permet de faciliter la recherche selon critères
         {
             int nbNoeuds = 0; //stocke le nombre de noeuds trouvés
 
@@ -88,10 +80,6 @@ namespace Catalogue
             XmlNodeList noeud = nomCherche.GetElementsByTagName(nomNoeud); //On compte les noeuds dont le nom correspond à celui du noeud pris en entrée
             nbNoeuds = noeud.Count;
             return nbNoeuds;
-
-            //dans la méthode de recherche, mettons, par livrable
-            //il faut donner le nombre de noeuds de type "Nature"
-            //puis ensuite faire tourner la fonction comme d'hab sur tous ces noeuds pour identifier ce qu'on cherche
         }
 
         public List<Projet> Deserialiser()
@@ -122,7 +110,7 @@ namespace Catalogue
             List<Projet> projetsTrouvesProj = new List<Projet>(); //liste qui contiendra nos résultats
 
             //Recherche du ou des projets concerné(s) par le critère
-            while (i < CompteProjets()) //tant qu'on a pas regardé tous les projets
+            while (i < CompteNoeuds("Projet")) //tant qu'on a pas regardé tous les projets
             {
                 reader.ReadToFollowing("NomProjet"); //On passe à la balise "NomProjet" suivante, càd on inspecte le projet suivant
                 string mot = reader.ReadElementContentAsString();//on dit que la valeur dans la balise NomProjet est un string
@@ -182,7 +170,7 @@ namespace Catalogue
             List<Projet> projetsTrouvesMat = new List<Projet>(); //liste qui contiendra nos résultats
             
             //Recherche du ou des projets concerné(s) par le critère
-            while (i < CompteProjets())
+            while (i < CompteNoeuds("Projet"))
             {
                 reader.ReadToFollowing("NomMat"); //On passe à la balise "matiere" suivante, càd on inspecte le projet suivant
                 string mot = reader.ReadElementContentAsString();
@@ -209,7 +197,7 @@ namespace Catalogue
             List<Projet> projetsTrouvesAnnee = new List<Projet>(); //liste qui contiendra nos résultats
 
             //Recherche du ou des projets concerné(s) par le critère
-            while (i < CompteProjets())
+            while (i < CompteNoeuds("Projet"))
             {
                 reader.ReadToFollowing("AnneeProjet"); //On passe à la balise "AnneeProjet" suivante, càd on inspecte le projet suivant
                 string mot = reader.ReadElementContentAsString();
@@ -236,7 +224,7 @@ namespace Catalogue
             List<Projet> projetsTrouvesInterv = new List<Projet>(); //liste qui contiendra nos résultats
 
             //Recherche du ou des projets concerné(s) par le critère
-            while (i < CompteProjets())
+            while (i < CompteNoeuds("Projet"))
             {
                 reader.ReadToFollowing("NomInterv"); //On passe à la balise "NomInterv" suivante ou on inspecte le projet suivant
                 //reader.ReadToFollowing("Intervenant");
@@ -254,6 +242,15 @@ namespace Catalogue
             }
             return projetsTrouvesInterv;
         }
+
+        //public int CompteProjets()
+        ////compte le nb de projets contenus dans le dossier XML via désérialisation
+        //{
+        //    int nbProjets = 0; 
+        //    List<Projet> Catalogue_projets = this.Deserialiser();//Désérialisation de notre fichier xml contenant les projets
+        //    nbProjets = Catalogue_projets.Count;
+        //    return nbProjets;
+        //}
 
 
 
@@ -297,25 +294,6 @@ namespace Catalogue
         //Console.WriteLine(p);
 
         //return p;
-
-
-        //public Projet CritInterv(object critinterv)
-        ////implémentation de l'interface pour trouver un intervenant
-        //{
-        //    string mat = critinterv as string;
-        //    for (int i = 0; i < this.Intervenants.Count; i++)
-        //    {
-        //        if (this.Intervenants[i] == critinterv)
-        //        {
-        //            return this;
-        //        }
-
-        //        else
-        //        {
-        //            Console.WriteLine("Il n'existe pas de projet pour lequel cet intervenant est impliqué !");
-        //        }
-        //    }
-        //}
 
         //public override bool Critere(object attrrech, object critrech)
         ////recherche dans les projets si le critère de recherche entré fait partie des attributs du projet

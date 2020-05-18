@@ -10,25 +10,31 @@ namespace Catalogue
     {
         static void Main(string[] args)
         {
-            Consultation consultation = new Consultation();
+            //Lancement de la consultation du catalogue
+            //Consultation consultation = new Consultation();
             //consultation.AffinerLaRecherche();
+
+
+
+
+
 
             Projet p = new Projet();
             List<Projet> ps = new List<Projet>();
 
-            ps = p.CritIntervenant("Favier");
-            //ps = p.CritMatiere("Introduction à la programmation");
+            //ps = p.CritIntervenant("Favier");
+            ps = p.CritMatiere("Intelligence Artificielle");
             //ps = p.CritAnnee("2019-2020");
             //ps = p.CritLivrable("Etat de l'art");
-            consultation.AfficherResultat(ps);
+            //consultation.AfficherResultat(ps);
 
             //ps = p.CritProjet("Projet Blackout");
             //ps = p.CritLivrable("Rapport");
 
-            //foreach (Projet s in ps) //Pour vérifier ce que contient la liste renvoyée pendant les tests
-            //{
-            //    Console.WriteLine(s);
-            //}
+            foreach (Projet s in ps) //Pour vérifier ce que contient la liste renvoyée pendant les tests
+            {
+                Console.WriteLine(s);
+            }
 
             //Console.WriteLine(p.CompteNoeuds("Projet"));
 

@@ -27,7 +27,12 @@ namespace Catalogue
 
         public override string ToString()
         {
-            string chRes = base.ToString() + "\n       Matière(s) d'intervention : " + Matiere_intervention;
+            string chRes = base.ToString() + "\n       Matière(s) d'intervention : ";
+            foreach (Matiere mi in this.Matiere_intervention) //On ajoute la liste des matières à la chaîne
+            {
+                chRes += mi.NomMat + " | ";
+            }
+            chRes += "\n";
             return chRes;
         }
     }
