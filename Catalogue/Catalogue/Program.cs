@@ -15,17 +15,14 @@ namespace Catalogue
             //consultation.AffinerLaRecherche();
 
 
-
-
-
-
             Projet p = new Projet();
             List<Projet> ps = new List<Projet>();
 
             //ps = p.CritIntervenant("Favier");
-            ps = p.CritMatiere("Intelligence Artificielle");
+            //ps = p.CritMatiere("Introduction à la programmation");
+            //ps = p.CritMatiere("Intelligence Artificielle");
             //ps = p.CritAnnee("2019-2020");
-            //ps = p.CritLivrable("Etat de l'art");
+            ps = p.CritLivrable("Code source");
             //consultation.AfficherResultat(ps);
 
             //ps = p.CritProjet("Projet Blackout");

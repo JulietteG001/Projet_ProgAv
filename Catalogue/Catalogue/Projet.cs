@@ -133,29 +133,30 @@ namespace Catalogue
 
             string livrable = critlivr as string;
             int i = 0; //compteur
-            //int j = 0; //compteur
+            int j = 0; //compteur
+            int numProj = 0;
             List<Projet> projetsTrouvesLivr = new List<Projet>(); //liste qui contiendra nos résultats
-
+            
             //Recherche du ou des projets concerné(s) par le critère
-            //while (j < CompteProjets()) //on regarde pour chaque projet
-            //{
-                while (i < 2)//while (i < CompteNoeuds("Nature"))
-                {
-                    reader.ReadToFollowing("Nature"); //On passe à la balise "Nature" suivante ou on inspecte le projet suivant
+            while (j < CompteNoeuds("Nature")) 
+            {
+                reader.ReadToFollowing("Nature"); //On passe à la balise "Nature" suivante ou on inspecte le projet suivant
 
-                    string mot = reader.ReadElementContentAsString();
-                    //pour chaque projet, on regarde si dans la liste des livrables, livrable == mot
-                    if (mot == livrable)
-                    {
-                        //si oui, on récupère le projet et on range tous ses attributs dans un objet de la classe Projet
-                        projetsTrouvesLivr.Add(Catalogue_projets[i]); //quand on a décommenté la boucle, remplacer par j ?
-                        Console.WriteLine("Projet ajouté !"); //test de fonctionnement, à supprimer
-                    }
-                    i++;
+                string mot = reader.ReadElementContentAsString(); Console.WriteLine(mot);Console.WriteLine("j" + j);
+                //pour chaque projet, on regarde si dans la liste des livrables, livrable == mot
+                if (mot == livrable)
+                {
+                    //si oui, on récupère le projet et on range tous ses attributs dans un objet de la classe Projet
+                    //projetsTrouvesLivr.Add(Catalogue_projets[numProj]); //quand on a décommenté la boucle, remplacer par j ?
+                Console.WriteLine(numProj); Console.WriteLine("Projet ajouté !"); //test de fonctionnement, à supprimer
                 }
-                //reader.ReadToFollowing("NomProjet");
-                //j++;
-            //}
+                i++;
+                if (i > 4)
+                {
+                    numProj++;
+                }
+                j++;
+            }
             return projetsTrouvesLivr;
         }
 
