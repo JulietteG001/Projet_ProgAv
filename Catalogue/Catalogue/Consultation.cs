@@ -9,10 +9,11 @@ namespace Catalogue
 {
     class Consultation
     {
-        public void AffinerLaRecherche()
+        public List<Projet> AffinerLaRecherche()
         //permet à l'utilisateur de chercher un projet selon différents critères
         {
             Console.Clear(); //permet de vider l'interface
+            Console.WriteLine("##################### Catalogue des projets menés à l'ENSC #####################\n\n");
             Console.WriteLine("Entrez le numéro correspondant à votre critère de recherche : \n" +
                 "1. Par projet\n" +
                 "2. Par matière\n" +
@@ -40,7 +41,7 @@ namespace Catalogue
             List<string> listeAffichage = new List<string>();
 
             Projet p = new Projet(); //Pour pouvoir utiliser CompteNoeuds(), à voir si on laisse comme ça
-
+            List<Projet> resultat = new List<Projet>();
             if (num == 1) //Si la recherche se fait par projet
             {
                 int j = 0;
@@ -100,7 +101,8 @@ namespace Catalogue
                 {
                     AffinerLaRecherche();
                 }
-                else Console.WriteLine(listeAffichage[num2 - 1]);
+                else resultat = p.CritProjet(listeAffichage[num2 - 1]);
+                
             }
 
             if (num == 2) //Recherche par matière
@@ -160,7 +162,7 @@ namespace Catalogue
                 {
                     AffinerLaRecherche();
                 }
-                else Console.WriteLine(listeAffichage[num2 - 1]);
+                else resultat = p.CritMatiere(listeAffichage[num2 - 1]);
             }
 
             if (num == 3) //Recherche par intervenant
@@ -223,7 +225,7 @@ namespace Catalogue
                 {
                     AffinerLaRecherche();
                 }
-                else Console.WriteLine(listeAffichage[num2*2 - 1]);
+                else resultat = p.CritIntervenant(listeAffichage[num2*2 - 1]);
             }
 
             if (num == 4) //Recherche par livrable
@@ -283,7 +285,7 @@ namespace Catalogue
                 {
                     AffinerLaRecherche();
                 }
-                else Console.WriteLine(listeAffichage[num2 - 1]);
+                else resultat = p.CritLivrable(listeAffichage[num2 - 1]);
             }
 
             if (num == 5) //Recherche par année
@@ -343,11 +345,13 @@ namespace Catalogue
                 {
                     AffinerLaRecherche();
                 }
-                else Console.WriteLine(listeAffichage[num2 - 1]);
+                else resultat = p.CritAnnee(listeAffichage[num2 - 1]);
             }
+            return resultat;
         }
         public void AfficherResultat(List<Projet> projets)
         {
+            Console.Clear();
             Console.WriteLine("======================== Résultats de la recherche ========================\n");
             foreach(Projet p in projets)
             {
