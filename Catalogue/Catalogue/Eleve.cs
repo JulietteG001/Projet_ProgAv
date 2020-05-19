@@ -9,25 +9,22 @@ namespace Catalogue
     public class Eleve : Intervenant
     {
         public string Promotion { get; set; }
-        public string Annee { get; set; }
 
         public Eleve() : base()
         //Constructeur par défaut
         {
             Promotion = "";
-            Annee = "";
         }
 
-        public Eleve(string _promotion, string _annee) : base()
+        public Eleve(string _promotion) : base()
         //constructeur surchargé
         {
             Promotion = _promotion;
-            Annee = _annee;
         }
 
         public override string ToString()
         {
-            string chRes = base.ToString() + "\n       Promotion : " + Promotion + "\n       Année : " + Annee;
+            string chRes = base.ToString() + "\n       Promotion : " + Promotion;
             return chRes;
         }
     }

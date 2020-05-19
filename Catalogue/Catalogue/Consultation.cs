@@ -184,7 +184,7 @@ namespace Catalogue
                             dejaAffiche = true; //l'intervenant a déjà été entré dans la liste de choses à afficher 
                         }
                     }
-                    if (!dejaAffiche) //si l'intervenant n'a jamais été rencontré
+                    if (!dejaAffiche && nom!="") //si l'intervenant n'a jamais été rencontré
                     {
                         listeAffichage.Add(prenom); //on l'ajoute dans la liste des choses à afficher
                         listeAffichage.Add(nom);
@@ -244,7 +244,7 @@ namespace Catalogue
                             dejaAffiche = true; //le livrable a déjà été entré dans la liste de choses à afficher 
                         }
                     }
-                    if (!dejaAffiche) //si le livrable n'a jamais été rencontré
+                    if (!dejaAffiche && livrable!="") //si le livrable n'a jamais été rencontré
                     {
                         listeAffichage.Add(livrable); //on l'ajoute dans la liste des livrables à afficher
                     }
@@ -352,7 +352,7 @@ namespace Catalogue
             foreach(Projet p in projets)
             {
                 Console.WriteLine(p.ToString());
-                Console.WriteLine("\n------------------------\n");
+                Console.WriteLine("\n _______________________________________________________________ \n");
             }
         }
         public interface ITrouvable
@@ -361,7 +361,7 @@ namespace Catalogue
             List<Projet> CritProjet(Object critProj);
             List<Projet> CritLivrable(Object critlivr);
             List<Projet> CritMatiere(Object critmat);
-            //List<Projet> CritInterv(Object critinterv);
+            List<Projet> CritIntervenant(Object critinterv);
             List<Projet> CritAnnee(Object critannee);
         }
     }

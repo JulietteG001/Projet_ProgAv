@@ -57,14 +57,19 @@ namespace Catalogue
             string chRes = "Nom : " + NomProjet + "\nNombre d'élèves: " + NbEleves + "\nDurée (en jours) : " + Duree + "\nAnnée du projet : " + AnneeProjet + "\nSemestres : " + Semestres + "\nConsigne : " + Consigne + "\n\nLivrables : ";
             foreach (Livrable l in this.Livrables) //On ajoute la liste des livrables à la chaîne
             {
-                chRes += l.Nature + " | ";
+                if (l.Nature != "") //si ce n'était pas une balise vide
+                {
+                    chRes += l.Nature + " | ";
+                }
             }
             chRes += "\nMatière associée : " + MatiereProjet.ToString() + "\n\nIntervenants : ";
             foreach (Intervenant i in this.Intervenants) //On ajoute la liste des intervenants à la chaîne
             {
-                chRes += i.ToString() + " | ";
+                if (i.NomInterv != "")
+                {
+                    chRes += i.ToString() + " | ";
+                }
             }
-            chRes += "\n _______________________________________________________________ \n";
             return chRes;
         }
 
@@ -135,27 +140,28 @@ namespace Catalogue
             int i = 0; //compteur
             int j = 0; //compteur
             int numProj = 0;
+            int nbLivrables = CompteNoeuds("Nature")/CompteNoeuds("Projet");
             List<Projet> projetsTrouvesLivr = new List<Projet>(); //liste qui contiendra nos résultats
             
             //Recherche du ou des projets concerné(s) par le critère
-            while (j < CompteNoeuds("Nature")) 
+            while (i < CompteNoeuds("Nature"))
             {
                 reader.ReadToFollowing("Nature"); //On passe à la balise "Nature" suivante ou on inspecte le projet suivant
-
-                string mot = reader.ReadElementContentAsString(); Console.WriteLine(mot);Console.WriteLine("j" + j);
+                
+                string mot = reader.ReadElementContentAsString(); 
                 //pour chaque projet, on regarde si dans la liste des livrables, livrable == mot
                 if (mot == livrable)
                 {
                     //si oui, on récupère le projet et on range tous ses attributs dans un objet de la classe Projet
-                    //projetsTrouvesLivr.Add(Catalogue_projets[numProj]); //quand on a décommenté la boucle, remplacer par j ?
-                Console.WriteLine(numProj); Console.WriteLine("Projet ajouté !"); //test de fonctionnement, à supprimer
-                }
-                i++;
-                if (i > 4)
-                {
-                    numProj++;
+                    projetsTrouvesLivr.Add(Catalogue_projets[numProj]); //quand on a décommenté la boucle, remplacer par j ?
                 }
                 j++;
+                if (j >= nbLivrables) //si on parcourt un autre projet
+                {
+                    numProj++;
+                    j = 0;
+                }
+                i++;
             }
             return projetsTrouvesLivr;
         }
@@ -222,11 +228,18 @@ namespace Catalogue
 
             string intervenant = critInterv as string;
             int i = 0; //compteur
+            int j = 0; //compteur
+            int numProj = 0;
+            int nbIntervenants = CompteNoeuds("NomInterv") / CompteNoeuds("Projet");
             List<Projet> projetsTrouvesInterv = new List<Projet>(); //liste qui contiendra nos résultats
 
             //Recherche du ou des projets concerné(s) par le critère
-            while (i < CompteNoeuds("Projet"))
+            while (i < CompteNoeuds("NomInterv"))
             {
+                //Console.WriteLine("----------------- ");
+                //Console.WriteLine("j " + j);
+                //Console.WriteLine("i " + i);
+                //Console.WriteLine("numProj " + numProj);
                 reader.ReadToFollowing("NomInterv"); //On passe à la balise "NomInterv" suivante ou on inspecte le projet suivant
                 //reader.ReadToFollowing("Intervenant");
 
@@ -235,9 +248,13 @@ namespace Catalogue
                 if (mot == intervenant)
                 {
                     //si oui, on récupère le projet et on range tous ses attributs dans un objet de la classe Projet
-                    projetsTrouvesInterv.Add(Catalogue_projets[i]);
-                    //Console.WriteLine(Catalogue_projets[i].Intervenants[0]);
-                    Console.WriteLine("Projet ajouté !"); //test de fonctionnement, à supprimer
+                    projetsTrouvesInterv.Add(Catalogue_projets[numProj]);
+                }
+                j++;
+                if (j >= nbIntervenants)
+                {
+                    numProj++;
+                    j = 0;
                 }
                 i++;
             }
