@@ -8,27 +8,12 @@ namespace Catalogue
 {
     public class Enseignant : Intervenant
     {
-        public List<Matiere> Matieres { get; set; }
 
-        public Enseignant() : base() 
-        //Constructeur par défaut
-        {
-            Matieres = new List<Matiere>();
-        }
-
-        public Enseignant(List<Matiere> matieres_enseignees) : base()
-        //constructeur surchargé
-        {
-            Matieres = matieres_enseignees;
-        }
+        public Enseignant() : base() { }
 
         public override string ToString()
         {
-            string chRes = base.ToString() + "\n       Matière(s) enseignée(s) : ";
-            foreach (Matiere m in this.Matieres) //On ajoute la liste des matières à la chaîne
-            {
-                chRes += m.NomMat + " | ";
-            }
+            string chRes = base.ToString();
             chRes += "\n";
             return chRes;
         }
