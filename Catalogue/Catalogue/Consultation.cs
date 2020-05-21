@@ -7,7 +7,7 @@ using System.Xml; //Pour utiliser XmlReader
 
 namespace Catalogue
 {
-    class Consultation
+    public class Consultation
     {
         public List<Projet> AffinerLaRecherche()
         //permet à l'utilisateur de chercher un projet selon différents critères
@@ -358,15 +358,6 @@ namespace Catalogue
                 Console.WriteLine(p.ToString());
                 Console.WriteLine("\n _______________________________________________________________ \n");
             }
-        }
-        public interface ITrouvable
-        {
-            //déclaration des méthodes de base
-            List<Projet> CritProjet(Object critProj);
-            List<Projet> CritLivrable(Object critlivr);
-            List<Projet> CritMatiere(Object critmat);
-            List<Projet> CritIntervenant(Object critinterv);
-            List<Projet> CritAnnee(Object critannee);
         }
     }
 }
