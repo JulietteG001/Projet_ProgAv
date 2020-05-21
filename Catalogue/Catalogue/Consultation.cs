@@ -12,7 +12,7 @@ namespace Catalogue
         public List<Projet> AffinerLaRecherche()
         //permet à l'utilisateur de chercher un projet selon différents critères
         {
-            Console.Clear(); //permet de vider l'interface
+            Console.Clear(); 
             Console.WriteLine("##################### Catalogue des projets menés à l'ENSC #####################\n\n");
             Console.WriteLine("Entrez le numéro correspondant à votre critère de recherche : \n" +
                 "1. Par projet\n" +
@@ -40,7 +40,7 @@ namespace Catalogue
             XmlReader reader = XmlReader.Create("Catalogue_projets.xml"); //déclaration du XmlReader
             List<string> listeAffichage = new List<string>();
 
-            Projet p = new Projet(); //Pour pouvoir utiliser CompteNoeuds(), à voir si on laisse comme ça
+            Projet p = new Projet(); //Pour pouvoir utiliser CompteNoeuds()
             List<Projet> resultat = new List<Projet>();
             if (num == 1) //Si la recherche se fait par projet
             {

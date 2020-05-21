@@ -151,7 +151,7 @@ namespace Catalogue
                 if (mot == critLivr)
                 {
                     //si oui, on récupère le projet et on range tous ses attributs dans un objet de la classe Projet
-                    projetsTrouvesLivr.Add(Catalogue_projets[numProj]); //quand on a décommenté la boucle, remplacer par j ?
+                    projetsTrouvesLivr.Add(Catalogue_projets[numProj]);
                 }
                 j++;
                 if (j >= nbLivrables) //si on parcourt un autre projet
