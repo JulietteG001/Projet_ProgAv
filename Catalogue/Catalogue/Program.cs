@@ -12,7 +12,15 @@ namespace Catalogue
         {
             //Lancement de la consultation du catalogue
             Consultation consultation = new Consultation();
-            consultation.AfficherResultat(consultation.AffinerLaRecherche());
+            int retourMenu = 0;
+            do
+            {
+                Console.Clear();
+                consultation.AfficherResultat(consultation.AffinerLaRecherche());
+                Console.WriteLine("1. Retour au menu principal");
+                retourMenu = int.Parse(Console.ReadLine());
+            }
+            while (retourMenu==1);
             Console.ReadLine();
         }
     }

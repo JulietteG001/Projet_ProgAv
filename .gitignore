@@ -338,3 +338,5 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+Catalogue/Catalogue/obj/Debug/Catalogue.csprojAssemblyReference.cache
+*.cache
